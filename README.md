@@ -28,12 +28,21 @@
   <br>选用Hibernate+jdbc实现
 
 ## 实现细节
-### 数据库设计
++ 数据库设计
+[点击查看UML](https://www.processon.com/view/link/5ddc9984e4b07f8de34221ac)
+<br>账号表：账号，密码，密钥，可用部门，可用人员
+<br>角色表：角色，可用权限
+<br>权限表：权限码，说明，对应资源
+<br>资源表：url，是否私有，对应权限
 
-<iframe
-  id="embed_dom"
-  name="embed_dom"
-  frameborder="0"
-  style="display:block;width:525px; height:245px;"
-  src="https://www.processon.com/embed/5ddc9984e4b0fcce5b59e5be">
-</iframe>
++ 资源权限关系
+[点击查看UML](https://www.processon.com/view/link/5de27d32e4b00e6d90104f34)
+
++ 类结构
+[点击查看UML](https://www.processon.com/view/link/5dddecf6e4b01291734556b8)
+
++ 过滤器设计
+[点击查看UML](https://www.processon.com/view/link/5ddcae0be4b07f8de342777f)
+
++  业务流程图
+[点击查看UML](https://www.processon.com/view/link/5dde373ae4b0e2c2988ff8c7)
