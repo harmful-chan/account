@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.account.orm.model">
+	<class name="Role" table="sys_role" >
+		<id name="id">
+			<generator class="native"/>
+		</id>
+		<property name="role"/>
+		<property name="explain"/>
+		
+		
+		<!-- 一对多 -->
+		<set name="staffs">
+            <key column="staff_id" />
+            <one-to-many class="Staff"/>
+        </set>
+		<!-- 多对多 -->
+		<set name="accounts" table="sys_account_role">
+            <key column="role_id" />
+            <many-to-many class="Account" column="account_id"/>
+        </set>	
+       	<set name="permissions" table="sys_role_permission">
+            <key column="role_id" />
+            <many-to-many class="Permission" column="permission_id"/>
+        </set>	
+	</class>
+</hibernate-mapping>
