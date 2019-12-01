@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class Permission {
 	private Integer id;
-	private Integer permission;
+	private Integer code;
 	private String explain;
 	private Set<Node> nodes = new HashSet<Node>();
 	private Set<Role> roles = new HashSet<Role>();
@@ -13,8 +13,8 @@ public class Permission {
 	public Permission(){
 		
 	}
-	public Permission(int p, String e) {
-		this.permission = p;
+	public Permission(Integer c, String e) {
+		this.code = c;
 		this.explain = e;
 	}
 	
@@ -39,14 +39,14 @@ public class Permission {
 		this.id = id;
 	}
 
-	public Integer getPermission() {
-		return permission;
-	}
+	
 
-	public void setPermission(Integer permission) {
-		this.permission = permission;
+	public Integer getCode() {
+		return code;
 	}
-
+	public void setCode(Integer code) {
+		this.code = code;
+	}
 	public String getExplain() {
 		return explain;
 	}

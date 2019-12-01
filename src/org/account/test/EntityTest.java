@@ -1,24 +1,42 @@
 package org.account.test;
-import org.account.orm.HibernateUtil;
-import org.account.orm.model.Staff;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.account.orm.AllocateManagement;
+import org.account.orm.model.*;
+import org.account.orm.services.*;
+import org.account.util.HibernateUtil;
 import org.junit.Test;
 
 public class EntityTest {
 	
-//	public static void main(String[] args) {
-//		new EntityTest().ShouldHibernateUsable();
-//	}
-//	
-	@Test
-	public void ShouldHibernateUsable() {
-		//获取核心配置文件默认:src/hibernate.cfg.xml
-		
-		HibernateUtil h1 =new HibernateUtil();
-		
+	private Object entity;
+	public EntityTest(){
+		new HibernateUtil();
+		this.entity = new AllocateManagement();
+		System.out.println("初始化测试程序!!!!!!!!!!!!!!!!!");
 	}
+	
+	@Test
+	public void SholdIRoleUsable() {
+		IRoleable o = (IRoleable)entity;
+		assertEquals(o.getRoleName("A000000000"), Role.ROOT);
+		assertTrue(o.Award("A000000000", Role.ROOT) > 0);
+	}
+	
+	@Test
+	public void SholdIPermissionUsable() {
+		IPermissionable o = (IPermissionable)entity;
+		assertTrue(o.getPermission(Role.ROOT).length > 0);
+	}
+	
+	@Test
+	public void SholdINodeUsable() {
+		INodeable o = (INodeable)entity;
+		//assertTrue(o.getNodes().size() > 0);
+		assertTrue(o.getPrivates().size() > 0);
+	}
+
 
 }

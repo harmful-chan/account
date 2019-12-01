@@ -7,7 +7,7 @@
 		<id name="id">
 			<generator class="native"/>
 		</id>
-		<property name="role"/>
+		<property name="name"/>
 		<property name="explain"/>
 		
 		

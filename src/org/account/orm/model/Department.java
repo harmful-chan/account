@@ -12,7 +12,7 @@ public class Department {
 	public static final String DIRECTOR = "director";     // ¶­ÊÂ»á
 	
 	private Integer id;
-	private String department;
+	private String name;
 	private String explain;
 	private Set<Staff> staffs = new HashSet<Staff>();
 	private Set<Account> accounts = new HashSet<Account>();
@@ -22,7 +22,7 @@ public class Department {
 		
 	}
 	public Department(String d, String e) {
-		this.department = d;
+		this.name = d;
 		this.explain = e;
 				
 	}
@@ -42,11 +42,12 @@ public class Department {
 		this.id = id;
 	}
 
-	public String getDepartment() {
-		return department;
+
+	public String getName() {
+		return name;
 	}
-	public void setDepartment(String department) {
-		this.department = department;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getExplain() {
 		return explain;

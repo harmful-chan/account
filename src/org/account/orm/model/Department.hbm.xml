@@ -7,7 +7,7 @@
 		<id name="id">
 			<generator class="native"/>
 		</id>
-		<property name="department"/>
+		<property name="name"/>
 		<property name="explain"/>
 		
 		<!-- 一对多 -->

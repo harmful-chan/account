@@ -7,7 +7,7 @@
 		<id name="id">
 			<generator class="native"/>
 		</id>
-		<property name="permission"/>
+		<property name="code"/>
 		<property name="explain"/>
 		<!-- 多对多 -->
 		<set name="roles" table="sys_role_permission">

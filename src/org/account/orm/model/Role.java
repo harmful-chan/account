@@ -9,8 +9,13 @@ public class Role {
 	public static final String ADMINISTRATOR = "administrator";    //后台管理员
 	public static final String ROOT = "root";    //最高管理员
 	
+	public static final int NORMAL_ID  = 1;    
+	public static final int GOVERNOR_ID = 2;
+	public static final int ADMINISTRATOR_ID = 3;
+	public static final int ROOT_ID = 4;
+	
 	private Integer id;
-	private String role;
+	private String name;
 	private String explain;
 	private Set<Staff> staffs = new HashSet<Staff>();
 	private Set<Account> accounts = new HashSet<Account>();
@@ -19,8 +24,8 @@ public class Role {
 	public Role(){
 		
 	}
-	public Role(String r, String e) {
-		this.role = r;
+	public Role(String n, String e) {
+		this.name = n;
 		this.explain = e;
 	}
 	public Set<Permission> getPermissions() {
@@ -48,11 +53,12 @@ public class Role {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getRole() {
-		return role;
+
+	public String getName() {
+		return name;
 	}
-	public void setRole(String role) {
-		this.role = role;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getExplain() {
 		return explain;

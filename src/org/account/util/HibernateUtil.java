@@ -1,4 +1,4 @@
-package org.account.orm;
+package org.account.util;
 
 import org.account.orm.model.*;
 import org.hibernate.Session;
@@ -8,6 +8,7 @@ import org.hibernate.cfg.Configuration;
 public class HibernateUtil {
 	
 	private static SessionFactory sessionFactory;
+	private static Session session;
 	static{
 		Configuration cfg = new Configuration().configure();
 		sessionFactory = cfg.buildSessionFactory();
@@ -17,9 +18,13 @@ public class HibernateUtil {
 	}
 	
 	public static Session getSession() {
-		return sessionFactory.getCurrentSession();
+		session =sessionFactory.getCurrentSession();
+		return session;
 	}
-	
+	public static void closeSession() {
+		session.getTransaction().commit();
+		session.close();
+	}
 	
 	private static void  initTestDate() {
 		
