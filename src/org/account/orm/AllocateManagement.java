@@ -1,8 +1,25 @@
 package org.account.orm;
 
-public class AllocateManagement {
-	public static final String NORMAL  = "normal";   //普通员工    
-	public static final String GOVERNR = "governor";     //部门主管
-	public static final String ADMINISTRATOR = "administrator";    //后台管理员
-	public static final String ROOT = "root";    //最高管理员
+import org.account.orm.services.IRoleable;
+import org.hibernate.Session;
+
+import com.oracle.webservices.internal.api.message.PropertySet.Property;
+
+public class AllocateManagement implements IRoleable {
+
+	
+	protected Session session;
+	
+	public AllocateManagement(){
+		this.session = HibernateUtil.getSession();
+	}
+	@Override
+	public String getRole(String number) {
+		return null;
+	}
+	@Override
+	public int Award(String number) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

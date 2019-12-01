@@ -17,8 +17,8 @@
 		<property name="entryDate"/>
 	
 		<!-- 一对多 -->
-		<many-to-one name="account" class="Account" column="staff_id" insert="false" update="false"/>
-		<many-to-one name="department" class="Department" column="staff_id" insert="false" update="false"/>
-		<many-to-one name="role" class="Role" column="staff_id" insert="false" update="false"/>
+		<many-to-one name="account" class="Account" column="account_id" />
+		<many-to-one name="department" class="Department" column="department_id"/>
+		<many-to-one name="role" class="Role" column="role_id"/>
 	</class>
 </hibernate-mapping>

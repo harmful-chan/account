@@ -16,7 +16,7 @@
         </set>	
         <set name="nodes" table="sys_permission_node">
             <key column="permission_id" />
-            <many-to-many class="Node" column="nodes_id"/>
+            <many-to-many class="Node" column="node_id"/>
         </set>	
 	</class>
 </hibernate-mapping>

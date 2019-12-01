@@ -1,7 +1,7 @@
 package org.account.orm.model;
 
 public class Staff {
-    private int id;
+    private Integer id;
     private String number;
     private String firstName;
     private String lastName;
@@ -14,7 +14,9 @@ public class Staff {
     private Department department;
     private Role role;
 	
-    
+	public Staff(){
+		
+	}
 	public Account getAccount() {
 		return account;
 	}
@@ -33,10 +35,11 @@ public class Staff {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	public int getId() {
+
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getNumber() {

@@ -8,7 +8,7 @@
 			<generator class="native"/>
 		</id>
 		<property name="node"/>
-		<property name="idPrivate"/>
+		<property name="isPrivate"/>
 		<!-- 多对多 -->
 		<set name="permissions" table="sys_permission_node">
             <key column="node_id" />

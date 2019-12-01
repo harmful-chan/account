@@ -6,7 +6,7 @@ import java.util.Set;
 import javax.print.attribute.HashAttributeSet;
 
 public class Account {
-	private int id;
+	private Integer id;
 	private String account;
 	private String password;
 	private String salf;
@@ -15,7 +15,28 @@ public class Account {
 	private Set<Department> departments = new HashSet<Department>();
 	private Set<Role> roles = new HashSet<Role>();
     
+    public Account(String account, String password, String salf, String explain) {
+    	this.account = account;
+    	this.password = password;
+    	this.salf = salf;
+    	this.explain = explain;
+    }
     
+    public Account() {
+    	
+    }
+    
+    
+	public Integer getId() {
+		return id;
+	}
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
 	public Set<Staff> getStaffs() {
 		return staffs;
 	}
@@ -33,12 +54,6 @@ public class Account {
 	}
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 	public String getAccount() {
 		return account;

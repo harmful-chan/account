@@ -17,7 +17,8 @@
 	   <property name="hibernate.format_sql">true</property>
 	   
 	   <property name="hbm2ddl.auto">update</property>
-	   
+	   <!-- 允许获取线程会话 -->
+	   <property name="hibernate.current_session_context_class">thread</property>
 	   <!-- 下面是映射的类 -->
 	   <mapping resource="org/account/orm/model/Account.hbm.xml"/>
 	   <mapping resource="org/account/orm/model/Department.hbm.xml"/>

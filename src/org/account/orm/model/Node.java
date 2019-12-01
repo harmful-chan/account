@@ -4,36 +4,54 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Node {
-	private int id;
+	private Integer id;
 	private String node;
-	private boolean idPrivate;
+	private Boolean isPrivate;
 	private Set<Permission> permissions = new HashSet<Permission>();
 	
 	
+	public Node() {
+		
+	}
+	
+	public Node(Boolean f, String n) {
+		this.isPrivate = f;
+		this.node = n;
+	}
+	
+
+	public Boolean getIsPrivate() {
+		return isPrivate;
+	}
+
+
+	public void setIsPrivate(Boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}
+
+
 	public Set<Permission> getPermissions() {
 		return permissions;
 	}
 	public void setPermissions(Set<Permission> permissions) {
 		this.permissions = permissions;
 	}
-	public int getId() {
+
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
+
+
 	public String getNode() {
 		return node;
 	}
 	public void setNode(String node) {
 		this.node = node;
 	}
-	public boolean isIdPrivate() {
-		return idPrivate;
-	}
-	public void setIdPrivate(boolean idPrivate) {
-		this.idPrivate = idPrivate;
-	}
-	
 	
 }

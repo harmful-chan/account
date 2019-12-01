@@ -4,13 +4,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Permission {
-	private int id;
-	private int permission;
+	private Integer id;
+	private Integer permission;
 	private String explain;
 	private Set<Node> nodes = new HashSet<Node>();
 	private Set<Role> roles = new HashSet<Role>();
     
-    
+	public Permission(){
+		
+	}
+	public Permission(int p, String e) {
+		this.permission = p;
+		this.explain = e;
+	}
+	
 	public Set<Node> getNodes() {
 		return nodes;
 	}
@@ -23,18 +30,23 @@ public class Permission {
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
-	public int getId() {
+
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
-	public int getPermission() {
+
+	public Integer getPermission() {
 		return permission;
 	}
-	public void setPermission(int permission) {
+
+	public void setPermission(Integer permission) {
 		this.permission = permission;
 	}
+
 	public String getExplain() {
 		return explain;
 	}

@@ -13,7 +13,7 @@
 		
 		<!-- 一对多 -->
 		<set name="staffs">
-            <key column="staff_id" />
+            <key column="role_id" />
             <one-to-many class="Staff"/>
         </set>
 		<!-- 多对多 -->
