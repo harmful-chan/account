@@ -10,10 +10,15 @@ public class HibernateUtil {
 	private static SessionFactory sessionFactory;
 	private static Session session;
 	static{
+		System.out.println("读取配置文件");
 		Configuration cfg = new Configuration().configure();
+		System.out.println("建立会话工厂");
 		sessionFactory = cfg.buildSessionFactory();
+		System.out.println("数据写入核心数据");
 		initCoreData();
+		System.out.println("数据建立核心依赖");
 		initCoreRelation();
+		System.out.println("数据写入测试数据数据");
 		initTestDate();
 	}
 	
@@ -59,9 +64,14 @@ public class HibernateUtil {
 			getSession().save(testStaff);
 			getSession().save(testAccount);
 			
+			
 			getSession().getTransaction().commit();
-			System.out.println("initTestDate");
+
 		}
+		
+		Staff staff =  (Staff)getSession().get(Staff.class, 1);
+		String s = staff.toString();
+		System.out.println("test staff :"+s);
 	}
 	
 	private static void initCoreRelation() {
@@ -129,9 +139,9 @@ public class HibernateUtil {
 			p100.getNodes().add(n14);
 			p110.getNodes().add(n15);
 			p120.getNodes().add(n16);
-			getSession().getTransaction().commit();
-			System.out.println("initCoreRelation");
+			
 		}
+		getSession().getTransaction().commit();
 	}
 	
 	private static void initCoreData() {
@@ -216,10 +226,8 @@ public class HibernateUtil {
 			getSession().save(n14);
 			getSession().save(n15);
 			getSession().save(n16);
-			
-			getSession().getTransaction().commit();
-			System.out.println("initCoreData");
 		}
+		getSession().getTransaction().commit();
 	}
 
 

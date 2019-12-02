@@ -17,6 +17,17 @@ public class Staff {
 	public Staff(){
 		
 	}
+	
+	public Staff(String number, String firstName, String lastName, String city, String province, String country, String zipCode, String entryDate) {
+		this.number = number;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.city = city;
+		this.province = province;
+		this.country = country;
+		this.zipCode = zipCode;
+		this.entryDate = entryDate;
+	}
 	public Account getAccount() {
 		return account;
 	}
@@ -89,6 +100,12 @@ public class Staff {
 	}
 	public void setEntryDate(String entryDate) {
 		this.entryDate = entryDate;
+	}
+	@Override
+	public String toString() {
+		return "Staff [id=" + id + ", number=" + number + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", city=" + city + ", province=" + province + ", country=" + country + ", zipCode=" + zipCode
+				+ ", entryDate=" + entryDate + ", account=0000000000, department=director, role=root];";
 	}
 	
 	

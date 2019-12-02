@@ -30,14 +30,12 @@ public class JDBCUtil {
 	
 	public static  Statement getStatement() {
 		try {	
-			Statement s = null;
-			Connection c = null;
-			if(++count > 0) {
-				c = (Connection) DriverManager.getConnection(sqlString, sqlUser, sqlPass);
-				s = c.createStatement();
-				connections.add(c);
-				statements.add(s);				
+			if(conn == null) {
+				conn = (Connection) DriverManager.getConnection(sqlString, sqlUser, sqlPass);
 			}
+			Statement s = conn.createStatement();
+			statements.add(s);
+			count++;
 	        return s;
 		}catch(Exception e) {
 			return null;
@@ -49,9 +47,12 @@ public class JDBCUtil {
 			while(count-- > 0) {
 				statements.get(count).close();
 				statements.remove(count);
-				connections.get(count).close();
-				connections.remove(count);
 			}			
+			if(conn != null) {
+				conn.close();
+				conn = null;
+			}
+			
 		}catch(Exception e) {
 
 		}

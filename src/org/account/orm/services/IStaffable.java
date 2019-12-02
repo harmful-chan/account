@@ -1,8 +1,10 @@
 package org.account.orm.services;
 
+import org.account.orm.model.Staff;
+
 public interface IStaffable {
-	public String getStaff(String number);
-	public int addStaff(String number, String firstName, String lastName, String city, String province, String country, String zipCode, String entryDate, String department, String role);
-	public int alterStaff(String number, String firstName, String lastName, String city, String province, String country, String zipCode, String entryDate, String department, String role);
+	public Staff getStaff(String number);
+	public int addStaff(String number, String firstName, String lastName, String city, String province, String country, String zipCode, String entryDate);
+	public int alterStaff(String number, String firstName, String lastName, String city, String province, String country, String zipCode, String entryDate);
 	public int removeStaff(String number);
 }

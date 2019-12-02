@@ -79,6 +79,12 @@ public class Account {
 	public void setExplain(String explain) {
 		this.explain = explain;
 	}
+
+	@Override
+	public String toString() {
+		return "Account [id=" + id + ", account=" + account + ", password=" + password + ", salf=" + salf + ", explain="
+				+ explain + ", staffs=" + staffs + ", departments=" + departments + ", roles=" + roles + "]";
+	}
     
     
 }

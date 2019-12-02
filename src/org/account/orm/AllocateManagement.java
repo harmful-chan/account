@@ -1,5 +1,6 @@
 package org.account.orm;
 
+import java.lang.reflect.Array;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,7 +129,52 @@ public class AllocateManagement implements IRoleable, IPermissionable, INodeable
 	@Override
 	public boolean isAny(List<String> list, String url) {
 		// TODO Auto-generated method stub
-		list.contains(url);
-		return false;
+		
+		return list.contains(url);
+	}
+	
+	public boolean isResource(String url) {
+		return isAny(getNodes(), url);
+	}
+	
+	public boolean isPrivateResource(String url) {
+		return isAny(getPrivates(), url);
+	}
+	public int[] getStaffPermissions(String number) {
+		String roleName = this.getRoleName(number);
+		int[] ret = this.getPermission(roleName);
+		return ret;
+	}
+	
+	
+	public List<String> getPermissionResources(int permissions) {
+		List<String> ret = new ArrayList<String>();
+		try {
+			String sql = "select node from sys_node where id " + 
+					"in (select node_id from sys_permission_node where permission_id " + 
+					"in (select id from sys_permission where code='"+permissions+"'));";
+		
+			ResultSet node = JDBCUtil.getStatement().executeQuery(sql);
+			while(node.next()) {
+				String n = node.getString("node");
+				ret.add(n);
+			}
+		}catch(Exception e) {
+			return null;
+		}finally {
+			JDBCUtil.close();
+		}
+		return ret;
+	}
+	public boolean isAllow(String number, String url) {
+		int[] codes = this.getStaffPermissions(number);
+		List<String> nodes = new ArrayList<String>();
+		for (int i = 0; i < codes.length; i++) {
+			List<String> ns = this.getPermissionResources(codes[i]);
+			if(ns != null) {
+				nodes.addAll(ns);
+			}
+		}
+		return this.isAny(nodes, url);	
 	}
 }
