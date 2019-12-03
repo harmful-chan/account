@@ -1,6 +1,6 @@
-package org.account.web.model;
+package org.account.web.viewmodel;
 
-public class TableView {
+public class TableViewModel {
 	public String number;
 	public String account;
 	public String deeppwd;
@@ -9,6 +9,9 @@ public class TableView {
 	public String no;
 	public boolean valid;
 	public String explain;
+	
+	
+	
 	public String getNumber() {
 		return number;
 	}

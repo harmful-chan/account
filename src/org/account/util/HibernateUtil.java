@@ -1,5 +1,8 @@
 package org.account.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.account.orm.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,15 +13,15 @@ public class HibernateUtil {
 	private static SessionFactory sessionFactory;
 	private static Session session;
 	static{
-		System.out.println("读取配置文件");
+		LogUtil.Log("[Hibernate]:读取配置文件]");
 		Configuration cfg = new Configuration().configure();
-		System.out.println("建立会话工厂");
+		LogUtil.Log("[Hibernate]:建立会话工厂");
 		sessionFactory = cfg.buildSessionFactory();
-		System.out.println("数据写入核心数据");
+		LogUtil.Log("[Hibernate]:数据写入核心数据");
 		initCoreData();
-		System.out.println("数据建立核心依赖");
+		LogUtil.Log("[Hibernate]:数据建立核心依赖");
 		initCoreRelation();
-		System.out.println("数据写入测试数据数据");
+		LogUtil.Log("[Hibernate]:数据写入测试数据数据");
 		initTestDate();
 	}
 	
@@ -71,7 +74,7 @@ public class HibernateUtil {
 		
 		Staff staff =  (Staff)getSession().get(Staff.class, 1);
 		String s = staff.toString();
-		System.out.println("test staff :"+s);
+		LogUtil.Log("[Hibernate]:test staff :"+s);
 	}
 	
 	private static void initCoreRelation() {
@@ -82,63 +85,71 @@ public class HibernateUtil {
 			Role governor = (Role)getSession().get(Role.class, 2);
 			Role administrator = (Role)getSession().get(Role.class, 3);
 			Role root = (Role)getSession().get(Role.class, 4);
-			Permission p10 = (Permission)getSession().get(Permission.class, 1);
-			Permission p20 = (Permission)getSession().get(Permission.class, 2);
-			Permission p30 = (Permission)getSession().get(Permission.class, 3);
-			Permission p40 = (Permission)getSession().get(Permission.class, 4);
-			Permission p50 = (Permission)getSession().get(Permission.class, 5);
-			Permission p60 = (Permission)getSession().get(Permission.class, 6);
-			Permission p70 = (Permission)getSession().get(Permission.class, 7);
-			Permission p80 = (Permission)getSession().get(Permission.class, 8);
-			Permission p90 = (Permission)getSession().get(Permission.class, 9);
-			Permission p100 = (Permission)getSession().get(Permission.class, 10);
-			Permission p110 = (Permission)getSession().get(Permission.class, 11);
-			Permission p120 = (Permission)getSession().get(Permission.class, 12);
-
-			Node n2 = (Node)getSession().get(Node.class, 2);
-			Node n3 = (Node)getSession().get(Node.class, 3);
-			Node n4 = (Node)getSession().get(Node.class, 4);
-			Node n5 = (Node)getSession().get(Node.class, 5);
-			Node n6 = (Node)getSession().get(Node.class, 6);
-			Node n7 = (Node)getSession().get(Node.class, 7);
-			Node n8 = (Node)getSession().get(Node.class, 8);
-			Node n9 = (Node)getSession().get(Node.class, 9);
-			Node n10 = (Node)getSession().get(Node.class, 10);
-			Node n11 = (Node)getSession().get(Node.class, 11);
-			Node n12 = (Node)getSession().get(Node.class, 12);
-			Node n13 = (Node)getSession().get(Node.class, 13);
-			Node n14 = (Node)getSession().get(Node.class, 14);
-			Node n15 = (Node)getSession().get(Node.class, 15);
-			Node n16 = (Node)getSession().get(Node.class, 16);
 			
+			Permission p5 = (Permission)getSession().get(Permission.class, 1);
+			Permission p10 = (Permission)getSession().get(Permission.class, 2);
+			Permission p20 = (Permission)getSession().get(Permission.class, 3);
+			Permission p30 = (Permission)getSession().get(Permission.class, 4);
+			Permission p40 = (Permission)getSession().get(Permission.class, 5);
+			Permission p50 = (Permission)getSession().get(Permission.class, 6);
+			Permission p60 = (Permission)getSession().get(Permission.class, 7);
+			Permission p70 = (Permission)getSession().get(Permission.class, 8);
+			Permission p80 = (Permission)getSession().get(Permission.class, 9);
+			Permission p90 = (Permission)getSession().get(Permission.class, 10);
+			Permission p100 = (Permission)getSession().get(Permission.class, 11);
+			Permission p110 = (Permission)getSession().get(Permission.class, 12);
+			Permission p120 = (Permission)getSession().get(Permission.class, 13);
+		
+			Node n1_2 = (Node)getSession().get(Node.class, 2);
+			Node n1_3 = (Node)getSession().get(Node.class, 3);
+			Node n2_1 = (Node)getSession().get(Node.class, 4);
+			Node n2_2 = (Node)getSession().get(Node.class, 5);
+			Node n3_1 = (Node)getSession().get(Node.class, 6);
+			Node n3_2 = (Node)getSession().get(Node.class, 7);
+			Node n3_3 = (Node)getSession().get(Node.class, 8);
+			Node n3_4 = (Node)getSession().get(Node.class, 9);
+			Node n3_5 = (Node)getSession().get(Node.class, 10);
+			Node n3_6 = (Node)getSession().get(Node.class, 11);
+			Node n3_7 = (Node)getSession().get(Node.class, 12);
+			Node n3_8 = (Node)getSession().get(Node.class, 13);
+			Node n3_9 = (Node)getSession().get(Node.class, 14);
+			Node n3_10 = (Node)getSession().get(Node.class, 15);
+			Node n3_11 = (Node)getSession().get(Node.class, 16);
+			Node n3_12 = (Node)getSession().get(Node.class, 17);
+			
+			normal.getPermissions().add(p5);
 			normal.getPermissions().add(p10);
+			governor.getPermissions().add(p5);
 			governor.getPermissions().add(p10);
 			governor.getPermissions().add(p20);
 			governor.getPermissions().add(p30);
 			governor.getPermissions().add(p40);
+			administrator.getPermissions().add(p5);
 			administrator.getPermissions().add(p50);
 			administrator.getPermissions().add(p60);
 			administrator.getPermissions().add(p70);
 			administrator.getPermissions().add(p80);
+			root.getPermissions().add(p5);
 			root.getPermissions().add(p90);
 			root.getPermissions().add(p100);
 			root.getPermissions().add(p110);
 			root.getPermissions().add(p120);
-			p10.getNodes().add(n2);
-			p10.getNodes().add(n3);
-			p10.getNodes().add(n4);
-			p10.getNodes().add(n5);
-			p20.getNodes().add(n6);
-			p30.getNodes().add(n7);
-			p40.getNodes().add(n8);
-			p50.getNodes().add(n9);
-			p60.getNodes().add(n10);
-			p70.getNodes().add(n11);
-			p80.getNodes().add(n12);
-			p90.getNodes().add(n13);
-			p100.getNodes().add(n14);
-			p110.getNodes().add(n15);
-			p120.getNodes().add(n16);
+			p5.getNodes().add(n1_2);
+			p5.getNodes().add(n1_3);
+			p5.getNodes().add(n2_1);
+			p5.getNodes().add(n2_2);
+			p10.getNodes().add(n3_1);
+			p20.getNodes().add(n3_2);
+			p30.getNodes().add(n3_3);
+			p40.getNodes().add(n3_4);
+			p50.getNodes().add(n3_5);
+			p60.getNodes().add(n3_6);
+			p70.getNodes().add(n3_7);
+			p80.getNodes().add(n3_8);
+			p90.getNodes().add(n3_9);
+			p100.getNodes().add(n3_10);
+			p110.getNodes().add(n3_11);
+			p120.getNodes().add(n3_12);
 			
 		}
 		getSession().getTransaction().commit();
@@ -169,68 +180,73 @@ public class HibernateUtil {
 			getSession().save(r3);
 			getSession().save(r4);
 			//权限数据
-			Permission p1 = new Permission(10,  "允许查看普通账号、密码");
-			Permission p2 = new Permission(20,  "允许插入普通账号");
-			Permission p3 = new Permission(30,  "允许修改普通账号的密码");
-			Permission p4 = new Permission(40,  "允许删除普通账号");
-			Permission p5 = new Permission(50,  "允许查看管理账号、密码");
-			Permission p6 = new Permission(60,  "允许插入管理账号");
-			Permission p7 = new Permission(70,  "允许修改管理账号的密码");
-			Permission p8 = new Permission(80,  "允许删除管理账号");
-			Permission p9 = new Permission(90,  "允许查看全部账号、密码");
-			Permission p10 = new Permission(100, "允许插入全部账号");
-			Permission p11 = new Permission(110, "允许修改全部账号的密码");
-			Permission p12 = new Permission(120, "允许删除全部账号");
-			getSession().save(p1);
-			getSession().save(p2);
-			getSession().save(p3);
-			getSession().save(p4);
+			
+			Permission p5 = new Permission(5,  "允许退出，查看信息、修改信息");
+			Permission p10 = new Permission(10,  "允许查看普通账号、密码");
+			Permission p20 = new Permission(20,  "允许插入普通账号");
+			Permission p30 = new Permission(30,  "允许修改普通账号的密码");
+			Permission p40 = new Permission(40,  "允许删除普通账号");
+			Permission p50 = new Permission(50,  "允许查看管理账号、密码");
+			Permission p60 = new Permission(60,  "允许插入管理账号");
+			Permission p70 = new Permission(70,  "允许修改管理账号的密码");
+			Permission p80 = new Permission(80,  "允许删除管理账号");
+			Permission p90 = new Permission(90,  "允许查看全部账号、密码");
+			Permission p100 = new Permission(100, "允许插入全部账号");
+			Permission p110 = new Permission(110, "允许修改全部账号的密码");
+			Permission p120 = new Permission(120, "允许删除全部账号");
+			
 			getSession().save(p5);
-			getSession().save(p6);
-			getSession().save(p7);
-			getSession().save(p8);
-			getSession().save(p9);
 			getSession().save(p10);
-			getSession().save(p11);
-			getSession().save(p12);
+			getSession().save(p20);
+			getSession().save(p30);
+			getSession().save(p40);
+			getSession().save(p50);
+			getSession().save(p60);
+			getSession().save(p70);
+			getSession().save(p80);
+			getSession().save(p90);
+			getSession().save(p100);
+			getSession().save(p110);
+			getSession().save(p120);
+
 			//资源数据
-			Node n1 = new Node(false, "http://localhost:8080/account/Home/login");
-			Node n2 = new Node(true, "http://localhost:8080/account/Home/deplan");
-			Node n3 = new Node(true, "http://localhost:8080/account/UserProfile/getInfo");
-			Node n4 = new Node(true, "http://localhost:8080/account/UserProfile/alterdInfo");
-			Node n5 = new Node(true, "http://localhost:8080/account/AccountTable/getInterior");
-			Node n6 = new Node(true, "http://localhost:8080/account/AccountTable/addInterior");
-			Node n7 = new Node(true, "http://localhost:8080/account/AccountTable/alterInterior");
-			Node n8 = new Node(true, "http://localhost:8080/account/AccountTable/removeInterior");
-			Node n9 = new Node(true, "http://localhost:8080/account/AccountTable/getSuper");
-			Node n10 = new Node(true, "http://localhost:8080/account/AccountTable/addSuper");
-			Node n11 = new Node(true, "http://localhost:8080/account/AccountTable/alterSuper");
-			Node n12 = new Node(true, "http://localhost:8080/account/AccountTable/removeSuper");
-			Node n13 = new Node(true, "http://localhost:8080/account/AccountTable/getRoot");
-			Node n14 = new Node(true, "http://localhost:8080/account/AccountTable/addRoot");
-			Node n15 = new Node(true, "http://localhost:8080/account/AccountTable/alterRoot");
-			Node n16 = new Node(true, "http://localhost:8080/account/AccountTable/removeRoot");
-			getSession().save(n1);
-			getSession().save(n2);
-			getSession().save(n3);
-			getSession().save(n4);
-			getSession().save(n5);
-			getSession().save(n6);
-			getSession().save(n7);
-			getSession().save(n8);
-			getSession().save(n9);
-			getSession().save(n10);
-			getSession().save(n11);
-			getSession().save(n12);
-			getSession().save(n13);
-			getSession().save(n14);
-			getSession().save(n15);
-			getSession().save(n16);
+			
+			Node n1_1 = new Node(false, "/account/Home/home");
+			Node n1_2 = new Node(true, "/account/Home/login");
+			Node n1_3 = new Node(true, "/account/Home/deplan");
+			Node n2_1 = new Node(true, "/account/UserProfile/getInfo");
+			Node n2_2 = new Node(true, "/account/UserProfile/alterdInfo");
+			Node n3_1 = new Node(true, "/account/AccountTable/getInterior");
+			Node n3_2 = new Node(true, "/account/AccountTable/addInterior");
+			Node n3_3 = new Node(true, "/account/AccountTable/alterInterior");
+			Node n3_4 = new Node(true, "/account/AccountTable/removeInterior");
+			Node n3_5 = new Node(true, "/account/AccountTable/getSuper");
+			Node n3_6 = new Node(true, "/account/AccountTable/addSuper");
+			Node n3_7 = new Node(true, "/account/AccountTable/alterSuper");
+			Node n3_8 = new Node(true, "/account/AccountTable/removeSuper");
+			Node n3_9 = new Node(true, "/account/AccountTable/getRoot");
+			Node n3_10 = new Node(true, "/account/AccountTable/addRoot");
+			Node n3_11 = new Node(true, "/account/AccountTable/alterRoot");
+			Node n3_12 = new Node(true, "/account/AccountTable/removeRoot");
+			getSession().save(n1_1);
+			getSession().save(n1_2);
+			getSession().save(n1_3);
+			getSession().save(n2_1);
+			getSession().save(n2_2);
+			getSession().save(n3_1);
+			getSession().save(n3_2);
+			getSession().save(n3_3);
+			getSession().save(n3_4);
+			getSession().save(n3_5);
+			getSession().save(n3_6);
+			getSession().save(n3_7);
+			getSession().save(n3_8);
+			getSession().save(n3_9);
+			getSession().save(n3_10);
+			getSession().save(n3_11);
+			getSession().save(n3_12);
 		}
 		getSession().getTransaction().commit();
 	}
 
-
-	
-	
 }

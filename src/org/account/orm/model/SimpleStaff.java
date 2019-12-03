@@ -6,6 +6,9 @@ public class SimpleStaff {
 	private String role;
 	private int[] permissions;
 	
+	public SimpleStaff() {
+		
+	}
 	
 	public SimpleStaff(String number, String department, String role, int[] permissions) {
 		super();

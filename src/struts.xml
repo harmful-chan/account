@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true" />
+    
+    <package name="account-package" abstract="true" extends="struts-default">
+        <interceptors>
+			<interceptor name="identityInterceptor" class="org.account.web.interceptor.IdentityInterceptor"/>
+			<interceptor-stack name="identityStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="identityInterceptor"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+    </package>
+    
+    <package name="home-package" namespace="/Home" extends="account-package">
+		<action name="*" class="org.account.web.action.HomeAction" method="{1}">
+			<result>/login.jsp</result>
+			<interceptor-ref name="identityStack"/>
+		</action>
+    </package>
+    
+    <package name="userprifile-package" namespace="/UserProfile" extends="account-package">
+		<action name="*" class="org.account.web.action.UserProfileAction" method="{1}">
+			<result name="user">/user.jsp</result>
+			<interceptor-ref name="identityStack"/>
+		</action>
+    </package>
+</struts>
