@@ -82,4 +82,6 @@ public class AllocateManagementTest extends TestBase{
 	public void SholdIsAllowUsable() {
 		assertTrue(entity.isAllow("A000000000", "http://localhost:8080/account/AccountTable/removeRoot"));
 	}
+
+	
 }

@@ -2,13 +2,7 @@ package org.account.orm;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.account.orm.model.Account;
-import org.account.orm.model.SimpleStaff;
 import org.account.orm.model.Staff;
-import org.account.orm.services.IActiveStaffable;
 import org.account.orm.services.IStaffable;
 import org.account.util.JDBCUtil;
 
@@ -57,8 +51,17 @@ public class CompanyManagement extends AllocateDepartmentAccountManagement imple
 	@Override
 	public int alterStaff(String number, String firstName, String lastName, String city, String province,
 			String country, String zipCode, String entryDate) {
-		String sql = "update cmp_staff set '"+number+"', '"+firstName+"', '"+lastName+"', '"+city+"', '"+province+"', '"+country+"', '"+zipCode+"', '"+entryDate+"';";
-		return 0;
+		
+		try {
+			String sql = "update cmp_staff set number='"+number+"', firstName='"+firstName+"', lastName='"+
+				lastName+"', city='"+city+"', province='"+province+"', country='"+
+					country+"', zipCode='"+zipCode+"', entryDate='"+entryDate+"';";
+			return JDBCUtil.getStatement().executeUpdate(sql);
+		} catch (SQLException e) {
+			return -1;
+		}finally {
+			JDBCUtil.close();
+		}
 	}
 
 

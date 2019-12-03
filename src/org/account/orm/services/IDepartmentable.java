@@ -1,6 +1,8 @@
 package org.account.orm.services;
 
+import java.util.List;
+
 public interface IDepartmentable {
-	public String[] getDepartments();
-	public String[] getDepartment(String number);
+	public List<String> getDepartmentNames();
+	public String getDepartmentName(String number);
 }

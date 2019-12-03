@@ -10,9 +10,12 @@ import java.util.List;
 import org.account.orm.model.Account;
 import org.account.orm.services.IAccountable;
 import org.account.orm.services.IDepAccLinkagetable;
+import org.account.orm.services.IDepartmentable;
+import org.account.orm.services.IEncipherable;
 import org.account.util.JDBCUtil;
+import org.apache.commons.codec.binary.Base64;
 
-public class AllocateDepartmentAccountManagement extends AllocateManagement implements IDepAccLinkagetable, IAccountable{
+public class AllocateDepartmentAccountManagement extends AllocateManagement implements IDepAccLinkagetable, IAccountable, IEncipherable, IDepartmentable{
 	
 	private static final int TIME_OUT = 30;
 	
@@ -211,6 +214,56 @@ public class AllocateDepartmentAccountManagement extends AllocateManagement impl
 		}
 		return ret;
 	}
+
+	@Override
+	public String encrypt(String password, String self) {
+		try {
+			return new String(Base64.encodeBase64((password+self).getBytes(), true));	
+		}catch(Exception e) {
+			return null;
+		}
+		
+	}
+
+	@Override
+	public String decode(String deeppwd) {
+		try {
+			return new String(Base64.decodeBase64(deeppwd));
+		}catch(Exception e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<String> getDepartmentNames() {
+		List<String> ret = new ArrayList<String>();
+		try {
+			ResultSet dr = JDBCUtil.getStatement().executeQuery("select name from cmp_department;");
+			if(dr.next()) 
+				ret.add(dr.getString("name"));
+		} catch (SQLException e) {
+			return null;
+		}finally {
+			JDBCUtil.close();
+		}
+		return ret;
+	}
+
+	@Override
+	public String getDepartmentName(String number) {
+		String ret = null;
+		try {
+			ResultSet ar = JDBCUtil.getStatement().executeQuery("select name from cmp_department where id in (select department_id from cmp_staff where number='"+number+"');");
+			if(ar.next()) 
+				ret = ar.getString("name");
+		} catch (SQLException e) {
+			return null;
+		}finally {
+			JDBCUtil.close();
+		}
+		return ret;
+	}
+
 	
 }
  

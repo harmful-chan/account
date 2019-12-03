@@ -73,4 +73,21 @@ public class AllocateDepartmentAccountManagementTest extends TestBase {
 	public void ShouldGetSaltUsable() {
 		assertEquals(entity.getSalt("0000000000"), "20191202");
 	}	
+	
+	@Test
+	public void ShoudCodeUsable() {
+		String code = this.entity.encrypt("src", "20191203");
+		String src = this.entity.decode(code);
+		assertEquals("src20191203", src);
+	}
+	
+	@Test
+	public void ShoudGetDepartmentNameUsable() {
+		assertNotNull(this.entity.getDepartmentName("A000000000"));
+	}
+	
+	@Test
+	public void ShoudGetDepartmentNamesUsable() {
+		assertTrue(this.entity.getDepartmentNames().size() > 0);
+	}
 }
