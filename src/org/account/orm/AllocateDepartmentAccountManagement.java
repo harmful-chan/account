@@ -264,6 +264,21 @@ public class AllocateDepartmentAccountManagement extends AllocateManagement impl
 		return ret;
 	}
 
+	@Override
+	public String getAccount(String number) {
+		String ret = null;
+		try {
+			ResultSet ar = JDBCUtil.getStatement().executeQuery("select account from sys_account where id in (select account_id from cmp_staff where number='"+number+"');");
+			if(ar.next()) 
+				ret = ar.getString("account");
+		} catch (SQLException e) {
+			return null;
+		}finally {
+			JDBCUtil.close();
+		}
+		return ret;
+	}
+
 	
 }
  

@@ -90,4 +90,9 @@ public class AllocateDepartmentAccountManagementTest extends TestBase {
 	public void ShoudGetDepartmentNamesUsable() {
 		assertTrue(this.entity.getDepartmentNames().size() > 0);
 	}
+	
+	@Test
+	public void ShoudGetAccountNamesUsable() {
+		assertNotNull(this.entity.getAccount("A000000000"));
+	}
 }

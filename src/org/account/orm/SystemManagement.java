@@ -16,8 +16,18 @@ public class SystemManagement extends CompanyManagement implements IActiveStaffa
 
 	@Override
 	public int setCurrentActiveStaff(String number) {
-		this.currentActiveStaff = this.activeStaff.get(number);
-		return (this.currentActiveStaff != null) ? 1 : -1;
+		String r = getRoleName(number);
+		String a = getAccount(number);
+		String d = getDepartmentName(number);
+		int[] ps = getPermission(r);
+		
+		if( r != null && a != null && d != null && ps != null ) {
+			this.currentActiveStaff = new SimpleStaff(number, a, d, r ,ps);	
+			
+			return 1;
+		}else {
+			return -1;
+		}
 	}
 
 	@Override
@@ -28,11 +38,12 @@ public class SystemManagement extends CompanyManagement implements IActiveStaffa
 	@Override
 	public int addActiveStaff(String number) {
 		String r = getRoleName(number);
+		String a = getAccount(number);
 		String d = getDepartmentName(number);
 		int[] ps = getPermission(r);
 		
-		if( r != null && d != null && ps != null ) {
-			SimpleStaff ss = new SimpleStaff(number, d, r ,ps);	
+		if( r != null && a != null && d != null && ps != null ) {
+			SimpleStaff ss = new SimpleStaff(number, a, d, r ,ps);	
 			this.activeStaff.put(number, ss);
 			return 1;
 		}else {

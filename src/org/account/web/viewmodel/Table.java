@@ -1,6 +1,6 @@
 package org.account.web.viewmodel;
 
-public class TableViewModel {
+public class Table {
 	public String number;
 	public String account;
 	public String deeppwd;

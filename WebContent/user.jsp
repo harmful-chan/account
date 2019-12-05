@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="/struts-tags" prefix="s" %>
+<%@  page import="org.account.web.viewmodel.User" %>
+<%  User user = (User)session.getAttribute("user_info"); %>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -21,11 +23,11 @@
    <div class="sidebar" data-image="../assets/img/sidebar-5.jpg"> 
     <div class="sidebar-wrapper"> 
      <div class="logo"> 
-      <a class="simple-text"> 账 号 管 理 系 统 </a> 
+      <a class="simple-text">Account Manager Pro</a> 
      </div> 
      <ul class="nav"> 
-      <li class="nav-item "> <a class="nav-link" href="./user.html"> <i class="nc-icon nc-circle-09"></i> <p> 用 户 档 案</p> </a> </li> 
-      <li> <a class="nav-link" href="./table.html"> <i class="nc-icon nc-notes"></i> <p> 账 号 列 表</p> </a> </li> 
+      <li class="nav-item "> <a class="nav-link" href="<%=session.getAttribute("user") %>"> <i class="nc-icon nc-circle-09"></i> <p> 用 户 档 案</p> </a> </li> 
+      <li> <a class="nav-link" href="<%=session.getAttribute("table") %>"> <i class="nc-icon nc-notes"></i> <p> 账 号 列 表</p> </a> </li> 
       <li class="nav-item active active-pro"> <a class="nav-link active" href="upgrade.html"> <i class="nc-icon nc-alien-33"></i> <p>Upgrade to PRO</p> </a> </li> 
      </ul> 
     </div> 
@@ -38,21 +40,16 @@
       <div class="collapse navbar-collapse justify-content-end" id="navigation"> 
        <ul class="navbar-nav ml-auto"> 
         <li class="nav-item"> <a href="#" class="nav-link" data-toggle="dropdown"> <i class="nc-icon nc-palette"></i> <span class="d-lg-none">Dashboard</span> </a> </li> 
-        <li class="dropdown nav-item"> <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"> <i class="nc-icon nc-planet"></i> <span class="notification">5</span> <span class="d-lg-none">Notification</span> </a> 
+        <li class="dropdown nav-item"> <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"> <i class="nc-icon nc-planet"></i> <span class="notification">1</span> <span class="d-lg-none">Notification</span> </a> 
          <ul class="dropdown-menu"> 
-          <a class="dropdown-item" href="#">Notification 1</a> 
-          <a class="dropdown-item" href="#">Notification 2</a> 
-          <a class="dropdown-item" href="#">Notification 3</a> 
-          <a class="dropdown-item" href="#">Notification 4</a> 
           <a class="dropdown-item" href="#">Another notification</a> 
          </ul> </li> 
         <li class="nav-item"> <a class="nav-link" href="#pablo"> <span class="no-icon">Account</span> </a> </li> 
         <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="no-icon">相关操作</span> </a> 
          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"> 
-          <a class="dropdown-item" href="#">切换账号</a> 
-          <a class="dropdown-item" href="#">重新登录</a> 
+          <a class="dropdown-item" href="<%=session.getAttribute("home_url") %>">切换账号</a> 
           <div class="divider"></div> 
-          <a class="dropdown-item" href="#">退出账号</a> 
+          <a class="dropdown-item" href="<%=session.getAttribute("deplan_url") %>">退出账号</a> 
          </div> </li> 
        </ul> 
       </div> 
@@ -69,24 +66,24 @@
           <p class="card-category">Here is a subtitle for this table</p> 
          </div> 
          <div class="card-body"> 
-          <form> 
+          <form action="<%=session.getAttribute("update_url") %>"> 
            <div class="row"> 
-            <div class="col-md-5 pr-1"> 
+            <div class="col-md-4 pr-1"> 
              <div class="form-group"> 
               <label>所属公司</label> 
-              <input type="text" class="form-control" disabled="" placeholder="Company"  /> 
+              <input type="text" class="form-control" disabled="" placeholder="Company" name="company" value="<%=user.getCompany() %>"/> 
              </div> 
             </div> 
-            <div class="col-md-3 px-1"> 
+            <div class="col-md-4 px-1"> 
              <div class="form-group"> 
               <label>登录账号</label> 
-              <input type="text" class="form-control" placeholder="Account" /> 
+              <input type="text" class="form-control" placeholder="Account" name="account" value="<%=user.getAccount() %>"/> 
              </div> 
             </div> 
             <div class="col-md-4 pl-1"> 
              <div class="form-group"> 
-              <label for="exampleInputEmail1">邮箱</label> 
-              <input type="email" class="form-control" placeholder="Email" /> 
+              <label>工号</label> 
+              <input  class="form-control" placeholder="number" name="number" value="<%=user.getNumber() %>"/> 
              </div> 
             </div> 
            </div> 
@@ -94,27 +91,33 @@
             <div class="col-md-4"> 
              <div class="form-group"> 
               <label>部门</label> 
-              <input type="text" class="form-control" placeholder="Department" /> 
+              <input type="text" class="form-control" placeholder="Department" name="department" value="<%=user.getDepartment() %>"/> 
              </div> 
             </div> 
             <div class="col-md-4"> 
              <div class="form-group"> 
               <label>职位</label> 
-              <input type="text" class="form-control" placeholder="Position" /> 
+              <input type="text" class="form-control" placeholder="Position" name="role" value="<%=user.getRole() %>"/> 
              </div> 
             </div> 
             <div class="col-md-4"> 
              <div class="form-group"> 
               <label>权限</label> 
-              <input type="text" class="form-control" placeholder="Permission" /> 
+              <input type="text" class="form-control" placeholder="Permission" name="permission" value="<%=user.getPermissioms() %>"/> 
              </div> 
             </div> 
            </div> 
            <div class="row"> 
-            <div class="col-md-12"> 
+            <div class="col-md-4"> 
              <div class="form-group"> 
               <label>登记日期</label> 
-              <input type="text" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" /> 
+              <input type="text" class="form-control" placeholder="Entry Date" name="entryDate" value="<%=user.getEntryDate() %>"/> 
+             </div> 
+            </div> 
+            <div class="col-md-4 pl-1"> 
+             <div class="form-group"> 
+              <label for="exampleInputEmail1">邮箱</label> 
+              <input type="email" class="form-control" placeholder="Email" name="email" value="<%=user.getEmail() %>"/> 
              </div> 
             </div> 
            </div> 
@@ -122,19 +125,19 @@
             <div class="col-md-4 pr-1"> 
              <div class="form-group"> 
               <label>市</label> 
-              <input type="text" class="form-control" placeholder="City" value="Mike" /> 
+              <input type="text" class="form-control" placeholder="City" name="city" value="<%=user.getCity() %>"/> 
              </div> 
             </div> 
             <div class="col-md-4 px-1"> 
              <div class="form-group"> 
               <label>国家</label> 
-              <input type="text" class="form-control" placeholder="Country" value="Andrew" /> 
+              <input type="text" class="form-control" placeholder="Country" name="country"  value="<%=user.getCountry() %>"/> 
              </div> 
             </div> 
             <div class="col-md-4 pl-1"> 
              <div class="form-group"> 
               <label>邮政编码</label> 
-              <input type="number" class="form-control" placeholder="ZIP Code" /> 
+              <input type="number" class="form-control" placeholder="ZIP Code" name="zipCode" value="<%=user.getZipCode() %>"/> 
              </div> 
             </div> 
            </div> 

@@ -34,47 +34,99 @@ public class HibernateUtil {
 		session.close();
 	}
 	
-	private static void  initTestDate() {
+	
+	
+	
+	private static void bulidAccount(String account, String password, String salf, String explain, int departmentId) {
+		Account a = new Account(account, password, salf, explain);
+		Department d = (Department)getSession().get(Department.class, departmentId);
+		a.getDepartments().add(d);
 		
-		getSession().getTransaction().begin();
-		//“ª∂‘∂‡πÿœµ
-		if(getSession().get(Staff.class, 1) == null) {
-			//ÃÌº” ˝æ›
-			Staff testStaff = new Staff();
-			testStaff.setNumber("A000000000");
-			testStaff.setFirstName("chan");
-			testStaff.setLastName("harmful");
-			testStaff.setCountry("china");
-			testStaff.setProvince("gaungdong");
-			testStaff.setCity("guangzhou");
-			testStaff.setZipCode("511400");
-			testStaff.setEntryDate("20191201");
-
-			Account testAccount = new Account("0000000000", "000000", "20191201", "≤‚ ‘’ ∫≈");
+		getSession().save(a);	
+	}
+	
+	private static void bulidStaff(int id, String number, String zipData, String firsh, String second, String city, String entryDate, int departmentId, int roleId, String account, String password, String salf, String explain) {
+		//ÃÌº” ˝æ›
+		if(getSession().get(Staff.class, id) == null) {
+			Staff staff = new Staff();
+			staff.setNumber(number);
+			staff.setFirstName(firsh);
+			staff.setLastName(second);
+			staff.setCountry("china");
+			staff.setProvince(city);
+			staff.setCity("guangzhou");
+			staff.setZipCode(zipData);
+			staff.setEntryDate(entryDate);
 			
-			Department director = (Department)getSession().get(Department.class, 5);
+			Account a = null;
+			if(account !=null && password != null) {
+				a = new Account(account, password, salf, explain);
+			}
+		
 			
-			Role root = (Role)getSession().get(Role.class, 4);
+			Department director = (Department)getSession().get(Department.class, departmentId);
 			
-			testStaff.setAccount(testAccount);
-			testStaff.setDepartment(director);
-			testStaff.setRole(root);
+			Role root = (Role)getSession().get(Role.class, roleId);
 			
-			director.getAccounts().add(testAccount);
-			
-			testAccount.getRoles().add(root);
-			
-			getSession().save(testStaff);
-			getSession().save(testAccount);
-			
-			
-			getSession().getTransaction().commit();
-
+			bulidRela(staff, a, director, root);
+		}
+	}
+	private static void bulidRela(Staff staff, Account account, Department department, Role role) {
+		if(account != null) {
+			staff.setAccount(account);	
+			getSession().save(account);	
+			account.getDepartments().add(department);
 		}
 		
-		Staff staff =  (Staff)getSession().get(Staff.class, 1);
-		String s = staff.toString();
-		LogUtil.Log("[Hibernate]:test staff :"+s);
+		staff.setDepartment(department);
+		staff.setRole(role);
+		getSession().save(staff);
+
+	}
+	private static void initTestDate() {
+		
+		getSession().getTransaction().begin();
+		
+		
+		bulidStaff(1,  "A000010000", "511400",   "chan", 	  "harmful",    "guangzhou", "20191201", 5, 4, "0000000000", "000000", "20191201", "≤‚ ‘’ ∫≈");
+		bulidStaff(2,  "A000010001", "19530902", "Georgi",    "Facello",    "M",         "19860626", 5, 4, "0000000001", "000001", "20191201", "≤‚ ‘’ ∫≈");
+		bulidStaff(3,  "A000010002", "19640602", "Bezalel",   "Simmel",     "F",         "19851121", 4, 3, "0000000002", "000002", "20191201", "≤‚ ‘’ ∫≈");
+		bulidStaff(4,  "A000010003", "19591203", "Parto",     "Bamford",    "M",         "19860828", 4, 3, null, null, null, null);
+		bulidStaff(5,  "A000010004", "19540501", "Chirstian", "Koblick",    "M",         "19861201", 4, 2, null, null, null, null);
+		bulidStaff(6,  "A000010005", "19550121", "Kyoichi",   "Maliniak",   "M",         "19890912", 4, 1, "0000000003", "000003", "20191201", "≤‚ ‘’ ∫≈");
+		bulidStaff(7,  "A000010006", "19530420", "Anneke",    "Preusig",    "F",         "19890602", 3, 3, "0000000004", "000004", "20191201", "≤‚ ‘’ ∫≈");
+		bulidStaff(8,  "A000010007", "19570523", "Tzvetan",   "Zielinski",  "F",         "19890210", 3, 3, null, null, null, null);
+		bulidStaff(9,  "A000010008", "19580219", "Saniya",    "Kalloufi",   "M",         "19940915", 3, 2, null, null, null, null);
+		bulidStaff(10, "A000010009", "19520419", "Sumant",    "Peac",       "F",         "19850218", 3, 2, null, null, null, null);
+		bulidStaff(11, "A000010010", "19630601", "Duangkaew", "Piveteau",   "F",         "19890824", 3, 2, null, null, null, null);
+		bulidStaff(12, "A000010011", "19531107", "Mary",      "Sluis",      "F",         "19900122", 3, 1, null, null, null, null);
+		bulidStaff(13, "A000010012", "19601004", "Patricio",  "Bridgland",  "M",         "19921218", 3, 1, null, null, null, null);
+		bulidStaff(14, "A000010013", "19630607", "Eberhardt", "Terkki",     "M",         "19851020", 3, 1, "0000000005", "000005", "20191201", "≤‚ ‘’ ∫≈");
+		bulidStaff(15, "A000010014", "19560212", "Berni",     "Genin",      "M",         "19870311", 2, 3, null, null, null, null);
+		bulidStaff(16, "A000010015", "19590819", "Guoxiang",  "Nooteboom",  "M",         "19870702", 2, 3, null, null, null, null);
+		bulidStaff(17, "A000010016", "19610502", "Kazuhito",  "Cappelletti","M",         "19950127", 2, 2, null, null, null, null);
+		bulidStaff(18, "A000010017", "19580706", "Cristinel", "Bouloucos",  "F",         "19930803", 2, 2, null, null, null, null);
+		bulidStaff(19, "A000010018", "19540619", "Kazuhide",  "Peha",	  	"F",         "19870403", 2, 1, null, null, null, null);
+		bulidStaff(20, "A000010019", "19530123", "Lillian",   "Haddadi",	"M",         "19990430", 2, 1, null, null, null, null);
+		bulidStaff(21, "A000010020", "19521224", "Mayuko",    "Warwick",	"M",         "19910126", 2, 1, null, null, null, null);
+		bulidStaff(22, "A000010021", "19600220", "Ramzi",     "Erde",		"M",         "19880210", 2, 1, null, null, null, null);
+		bulidStaff(23, "A000010022", "19520708", "Shahaf",	   "Famili",	"M",         "19950822", 2, 1, null, null, null, null);
+		bulidStaff(24, "A000010023", "19530929", "Bojan",     "Montemayor", "F",         "19891217", 1, 3, null, null, null, null);
+		bulidStaff(25, "A000010024", "19580905", "Suzette",   "Pettey",		"F",         "19970519", 1, 3, null, null, null, null);
+		bulidStaff(26, "A000010025", "19581031", "Prasadram", "Heyers",		"M",         "19870817", 1, 2, null, null, null, null);
+		bulidStaff(27, "A000010026", "19530403", "Yongqiao",  "Berztiss",	"M",         "19950320", 1, 2, null, null, null, null);
+		bulidStaff(28, "A000010027", "19620710", "Divier",    "Reistad",	"F",         "19890707", 1, 1, null, null, null, null);
+		bulidStaff(29, "A000010028", "19631126", "Domenick",  "Tempesti",	"M",         "19911022", 1, 1, null, null, null, null);
+		bulidStaff(30, "A000010029", "19561213", "Otmar",     "Herbst",		"M",         "19851120", 1, 1, null, null, null, null);
+		bulidStaff(31, "A000010030", "19580714", "Elvis",     "Demeyer",	"M",         "19940217", 1, 1, null, null, null, null);
+		
+		for (int i = 0; i < 50; i++) {
+			bulidAccount("00000000"+ ((i<10)? "0"+i: i), "0000"+ ((i<10)? "0"+i: i), "20191203", "≤‚ ‘’ ∫≈", (i % 5)+1);	
+		}
+		
+		getSession().getTransaction().commit();
+		LogUtil.Log("[Hibernate]:–¥»Î≤‚ ‘ ˝æ›");
+		
 	}
 	
 	private static void initCoreRelation() {
