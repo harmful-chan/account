@@ -17,7 +17,7 @@ public class JDBCUtil {
 	private static int count = 0;
 	private static List<Connection> connections = new ArrayList<Connection>();
 	private static List<Statement> statements = new ArrayList<Statement>();
-	static {
+	public static void init() {
 		try {
 			Class.forName(sqlDriver);
 

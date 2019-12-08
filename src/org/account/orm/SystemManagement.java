@@ -2,8 +2,8 @@ package org.account.orm;
 
 import java.util.*;
 
+import org.account.orm.inter.IActiveStaffable;
 import org.account.orm.model.SimpleStaff;
-import org.account.orm.services.IActiveStaffable;
 
 public class SystemManagement extends CompanyManagement implements IActiveStaffable {
 

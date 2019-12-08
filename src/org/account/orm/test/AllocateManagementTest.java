@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.account.orm.AllocateManagement;
+import org.account.orm.inter.INodeable;
+import org.account.orm.inter.IPermissionable;
+import org.account.orm.inter.IRoleable;
 import org.account.orm.model.Role;
-import org.account.orm.services.INodeable;
-import org.account.orm.services.IPermissionable;
-import org.account.orm.services.IRoleable;
 import org.junit.Test;
 
 public class AllocateManagementTest extends TestBase{

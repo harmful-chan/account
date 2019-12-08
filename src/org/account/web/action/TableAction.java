@@ -8,7 +8,7 @@ import org.account.web.viewmodel.Table;
 
 import com.opensymphony.xwork2.ModelDriven;
 
-public class AccountTableAction extends ActionBase implements ModelDriven<Table>{
+public class TableAction extends ActionBase implements ModelDriven<Table>{
 
 	private static final long serialVersionUID = 1L;
 

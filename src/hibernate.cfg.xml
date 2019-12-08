@@ -7,12 +7,12 @@
 	<session-factory>
 	   <!-- JDBC 驱动程序类 -->
 	   <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-	   <property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433; DatabaseName=account</property>
+	   <property name="hibernate.connection.url">jdbc:sqlserver://192.168.28.253:1433; DatabaseName=account</property>
 	   <property name="hibernate.connection.username">sa</property>
 	   <property name="hibernate.connection.password">123456</property>
 	   <property name="hibernate.connection.autocommit">true</property>
 	   <!-- 是否显示sql -->
-	   <property name="hibernate.show_sql">false</property>
+	   <property name="hibernate.show_sql">true</property>
 	   <!-- 是否将sql格式化 -->
 	   <property name="hibernate.format_sql">true</property>
 	   

@@ -2,8 +2,9 @@ package org.account.orm;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import org.account.orm.inter.IStaffable;
 import org.account.orm.model.Staff;
-import org.account.orm.services.IStaffable;
 import org.account.util.JDBCUtil;
 
 public class CompanyManagement extends AllocateDepartmentAccountManagement implements IStaffable {
@@ -15,14 +16,7 @@ public class CompanyManagement extends AllocateDepartmentAccountManagement imple
 		try {
 			ResultSet ss = JDBCUtil.getStatement().executeQuery("select * from cmp_staff where number='"+number+"';");
 			if(ss.next()) {
-				Staff staff = new Staff(ss.getString("number"), 
-					ss.getString("firstName"),
-					ss.getString("lastName"),
-					ss.getString("city"),
-					ss.getString("province"),
-					ss.getString("country"),
-					ss.getString("zipCode"),
-					ss.getString("entryDate"));
+				Staff staff = new Staff();
 				ret = staff;
 			}
 		}catch(Exception e) {

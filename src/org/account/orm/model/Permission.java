@@ -53,6 +53,10 @@ public class Permission {
 	public void setExplain(String explain) {
 		this.explain = explain;
 	}
+	@Override
+	public String toString() {
+		return "Permission [id=" + id + ", code=" + code + ", explain=" + explain + "]";
+	}
     
     
     

@@ -25,15 +25,15 @@
 		</action>
     </package>
     
-    <package name="userprifile-package" namespace="/UserProfile" extends="account-package">
-		<action name="*" class="org.account.web.action.UserProfileAction" method="{1}">
+    <package name="userprifile-package" namespace="/User" extends="account-package">
+		<action name="*" class="org.account.web.action.UserAction" method="{1}">
 			<result>/user.jsp</result>
 			<result name="error">/login.jsp</result>
 			<interceptor-ref name="identityStack"/>
 		</action>
     </package>
-    <package name="accounttanle-package" namespace="/AccountTable" extends="account-package">
-		<action name="*" class="org.account.web.action.AccountTableAction" method="{1}">
+    <package name="accounttanle-package" namespace="/Table" extends="account-package">
+		<action name="*" class="org.account.web.action.TableAction" method="{1}">
 			<result>/table.jsp</result>
 			<result name="error">/login.jsp</result>
 			<interceptor-ref name="identityStack"/>

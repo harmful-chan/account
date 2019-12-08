@@ -11,7 +11,7 @@ import org.apache.struts2.ServletActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class UserProfileAction  extends ActionBase implements ModelDriven<User> {
+public class UserAction  extends ActionBase implements ModelDriven<User> {
 	private static final long serialVersionUID = 1L;
 
 	private User user = new User();

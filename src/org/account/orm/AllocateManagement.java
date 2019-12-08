@@ -5,6 +5,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.account.orm.inter.INodeable;
+import org.account.orm.inter.IPermissionable;
+import org.account.orm.inter.IRoleable;
 import org.account.orm.model.*;
 import org.account.orm.services.*;
 import org.account.util.HibernateUtil;

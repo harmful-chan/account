@@ -7,7 +7,7 @@ import javax.print.attribute.HashAttributeSet;
 
 public class Account {
 	private Integer id;
-	private String account;
+	private String number;
 	private String password;
 	private String salf;
 	private String explain;
@@ -15,8 +15,8 @@ public class Account {
 	private Set<Department> departments = new HashSet<Department>();
 	private Set<Role> roles = new HashSet<Role>();
     
-    public Account(String account, String password, String salf, String explain) {
-    	this.account = account;
+    public Account(String number, String password, String salf, String explain) {
+    	this.number = number;
     	this.password = password;
     	this.salf = salf;
     	this.explain = explain;
@@ -55,12 +55,15 @@ public class Account {
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
-	public String getAccount() {
-		return account;
+
+	public String getNumber() {
+		return number;
 	}
-	public void setAccount(String account) {
-		this.account = account;
+
+	public void setNumber(String number) {
+		this.number = number;
 	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -82,8 +85,7 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account [id=" + id + ", account=" + account + ", password=" + password + ", salf=" + salf + ", explain="
-				+ explain + ", staffs=" + staffs + ", departments=" + departments + ", roles=" + roles + "]";
+		return "Account [id=" + id + ", account=" + number + ", password=" + password + ", salf=" + salf + ", explain=" + explain+"]";
 	}
     
     

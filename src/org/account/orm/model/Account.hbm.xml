@@ -7,7 +7,7 @@
 		<id name="id">
 			<generator class="native"/>
 		</id>
-		<property name="account"/>
+		<property name="number"/>
 		<property name="password"/>
 		<property name="salf"/>
 		<property name="explain"/>

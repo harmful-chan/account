@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.account.orm.inter.IAccountable;
+import org.account.orm.inter.IDepAccLinkagetable;
+import org.account.orm.inter.IDepartmentable;
+import org.account.orm.inter.IEncipherable;
 import org.account.orm.model.Account;
-import org.account.orm.services.IAccountable;
-import org.account.orm.services.IDepAccLinkagetable;
-import org.account.orm.services.IDepartmentable;
-import org.account.orm.services.IEncipherable;
 import org.account.util.JDBCUtil;
 import org.apache.commons.codec.binary.Base64;
 
@@ -277,6 +277,12 @@ public class AllocateDepartmentAccountManagement extends AllocateManagement impl
 			JDBCUtil.close();
 		}
 		return ret;
+	}
+
+	@Override
+	public int setAccountUser(String account) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	

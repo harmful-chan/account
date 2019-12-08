@@ -5,6 +5,7 @@ import java.util.Set;
 
 public class Node {
 	private Integer id;
+	private String name;
 	private String node;
 	private Boolean isPrivate;
 	private Set<Permission> permissions = new HashSet<Permission>();
@@ -14,11 +15,20 @@ public class Node {
 		
 	}
 	
-	public Node(Boolean f, String n) {
+	public Node(String name, Boolean f, String n) {
+		this.name = name;
 		this.isPrivate = f;
 		this.node = n;
 	}
 	
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public Boolean getIsPrivate() {
 		return isPrivate;
@@ -52,6 +62,11 @@ public class Node {
 	}
 	public void setNode(String node) {
 		this.node = node;
+	}
+
+	@Override
+	public String toString() {
+		return "Node [id=" + id + ", name=" + name + ", node=" + node + ", isPrivate=" + isPrivate + "]";
 	}
 	
 }

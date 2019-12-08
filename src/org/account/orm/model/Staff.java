@@ -10,6 +10,7 @@ public class Staff {
     private String country;
     private String zipCode;
     private String entryDate;
+    private String email;
     private Account account;
     private Department department;
     private Role role;
@@ -18,7 +19,12 @@ public class Staff {
 		
 	}
 	
-	public Staff(String number, String firstName, String lastName, String city, String province, String country, String zipCode, String entryDate) {
+
+	
+	public Staff(Integer id, String number, String firstName, String lastName, String city, String province,
+			String country, String zipCode, String entryDate, String email) {
+		super();
+		this.id = id;
 		this.number = number;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -27,7 +33,19 @@ public class Staff {
 		this.country = country;
 		this.zipCode = zipCode;
 		this.entryDate = entryDate;
+		this.email = email;
 	}
+
+
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public Account getAccount() {
 		return account;
 	}
@@ -101,12 +119,14 @@ public class Staff {
 	public void setEntryDate(String entryDate) {
 		this.entryDate = entryDate;
 	}
+
 	@Override
 	public String toString() {
 		return "Staff [id=" + id + ", number=" + number + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", city=" + city + ", province=" + province + ", country=" + country + ", zipCode=" + zipCode
-				+ ", entryDate=" + entryDate + ", account=0000000000, department=director, role=root];";
+				+ ", entryDate=" + entryDate + ", email=" + email + "]";
 	}
+	
 	
 	
 }

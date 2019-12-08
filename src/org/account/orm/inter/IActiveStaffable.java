@@ -1,4 +1,4 @@
-package org.account.orm.services;
+package org.account.orm.inter;
 
 
 import java.util.List;

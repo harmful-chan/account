@@ -1,11 +1,14 @@
 package org.account.web.interceptor;
 
+import java.util.List;
 import java.util.Map;
 
 import org.account.orm.SystemManagement;
+import org.account.orm.model.Node;
+import org.account.orm.services.*;
+import org.account.orm.services.StaffInfoServer;
 import org.account.util.HibernateUtil;
 import org.account.util.JDBCUtil;
-import org.account.util.LogUtil;
 import org.account.web.action.ActionBase;
 import org.account.web.action.IActionable;
 import org.apache.struts2.ServletActionContext;
@@ -21,91 +24,58 @@ public class IdentityInterceptor  extends AbstractInterceptor{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	
+	
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		//初始化[HibernateUtil]
-		new HibernateUtil();
-		new JDBCUtil();
+		HibernateUtil.init();
+		JDBCUtil.init();
 		
-		//注入SystemManagement
-		Map<String, Object> app = ServletActionContext.getContext().getApplication();
-		SystemManagement sm = (SystemManagement) app.get("management");
-		if( sm == null ) {
-			sm = new SystemManagement();
-			app.put("management", sm);
-		}
 
-		boolean ret = false;
-		//获取url
+		
+		//初始化服务
+		ResourceServer resource = new ResourceServer();
+		AssignedServer assigned = new AssignedServer();
+		StaffInfoServer staffInfo = new StaffInfoServer();
+		ActiveServer<String> active = new ActiveServer<String>();
+		
 		String url = ServletActionContext.getRequest().getRequestURI();
-		if(url.contains(".action")) {
-			url.replace(".action", "");
+		String opera = (String)ServletActionContext.getRequest().getParameter("number");    //操作人
+		
+		//设置当前用户
+		active.setCurrent(opera);
+		
+		
+		//共有资源
+		boolean isPublic =  resource.isPublicResource(url);
+		if(isPublic) {
+			invocation.invoke();
 		}
-		LogUtil.Log("[请求url]:"+url);
 		
-		
-		
-		
-		
-		//资源有效验证
-		ret = sm.isResource(url);
-		if(!ret) {
-			ServletActionContext.getContext().getSession().put("msg", new String[] {ActionBase.DANGER, "访问url不存在"});
+		//私有资源
+		boolean isPrivate = resource.isPrivateResource(url);
+		if(!isPrivate) {
+			LoggerServer.danger("访问资源无效");
 			return Action.ERROR;
 		}
-		LogUtil.Log("[内部url]:"+ret);
 		
 		
-		
-		
-		
-		//资源私有验证
-		ret = sm.isPrivateResource(url);
-		LogUtil.Log("[内部私有]:"+ret);
-		
-		String number = (String)ServletActionContext.getRequest().getParameter("number");
-		if(ret) {
-
-			//权限验证
-			ret = sm.isAllow(number, url);
-			if(!ret) {
-				ServletActionContext.getContext().getSession().put("msg", new String[] {ActionBase.DANGER, "员工"+number+"权限不足"});
-				return Action.ERROR;
-			}
-			LogUtil.Log("[允许通过]:"+ret);
-			
-			
-			
-			
-			
-			///验证是否登录操作
-			//验证是否登录用户
-			ret = sm.isActiveStaff(number);
-			if(!ret && !url.contains("Home/login")) {
-				ServletActionContext.getContext().getSession().put("msg", new String[] {ActionBase.DANGER, "员工"+number+"未登陆"});
-				return Action.ERROR;
-			}
-			LogUtil.Log("[用户是否已登录]:"+ret);		
-
-			
-			//设置当前用户
-			sm.setCurrentActiveStaff(number);
-			LogUtil.Log("[当前访问用户]:"+number);
+		//判断是否允许
+		List<Node> nodes = staffInfo.getNodes(opera);
+		boolean isAllow = resource.isAny(nodes, url);
+		if(!isAllow) {
+			LoggerServer.danger("权限不足");
+			return Action.ERROR;
 		}
 		
 		
-
-		
-		//注入实例
-		Object action = invocation.getAction();
-		if(action instanceof IActionable) {
-			((IActionable) action).setSystemManagement(sm);
-			((IActionable) action).setRequest(ServletActionContext.getRequest());		
-			((IActionable) action).setSession(ServletActionContext.getContext().getSession());		
+		boolean isLogin = url.contains("Home/login");
+		if(isLogin) {
+			invocation.invoke();
 		}
-		LogUtil.Log("[Action]:注入SystemManagement, Request");
-
-	
+		
+		
 		return invocation.invoke();
 	}
 

@@ -66,6 +66,10 @@ public class Role {
 	public void setExplain(String explain) {
 		this.explain = explain;
 	}
+	@Override
+	public String toString() {
+		return "Role [id=" + id + ", name=" + name + ", explain=" + explain + "]";
+	}
     
     
 }

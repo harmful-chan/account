@@ -61,4 +61,10 @@ public class Department {
 	public void setStaffs(Set<Staff> staffs) {
 		this.staffs = staffs;
 	}
+	@Override
+	public String toString() {
+		return "Department [id=" + id + ", name=" + name + ", explain=" + explain + "]";
+	}
+	
+	
 }

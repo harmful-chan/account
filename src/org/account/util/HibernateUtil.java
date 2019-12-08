@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.account.orm.model.*;
+import org.account.orm.services.LoggerServer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -12,28 +13,94 @@ public class HibernateUtil {
 	
 	private static SessionFactory sessionFactory;
 	private static Session session;
-	static{
-		LogUtil.Log("[Hibernate]:读取配置文件]");
-		Configuration cfg = new Configuration().configure();
-		LogUtil.Log("[Hibernate]:建立会话工厂");
-		sessionFactory = cfg.buildSessionFactory();
-		LogUtil.Log("[Hibernate]:数据写入核心数据");
-		initCoreData();
-		LogUtil.Log("[Hibernate]:数据建立核心依赖");
-		initCoreRelation();
-		LogUtil.Log("[Hibernate]:数据写入测试数据数据");
-		initTestDate();
-	}
 	
 	public static Session getSession() {
 		session =sessionFactory.getCurrentSession();
 		return session;
 	}
 	public static void closeSession() {
-		session.getTransaction().commit();
-		session.close();
+		//session.close();
 	}
 	
+	public static void init() {
+		LoggerServer.console("[Hibernate]:读取配置文件]");
+		Configuration cfg = new Configuration().configure();
+		LoggerServer.console("[Hibernate]:建立会话工厂");
+		sessionFactory = cfg.buildSessionFactory();
+		LoggerServer.console("[Hibernate]:数据写入核心数据");
+		initCoreData();
+		LoggerServer.console("[Hibernate]:数据建立核心依赖");
+		initCoreRelation();
+		LoggerServer.console("[Hibernate]:数据写入测试数据数据");
+		initTestDate();
+	}
+	
+	public static Object get(Class<? extends Object> arg0, int arg1) {
+		Object ret = null;
+		try {
+			getSession().beginTransaction();
+			ret = getSession().get(arg0, arg1);
+			getSession().getTransaction().commit();
+		}catch(Exception e) {
+			return null;
+		}finally {
+			getSession().close();
+		}
+		return ret;
+	}
+	public static int save(Object arg0) {
+		try {
+			getSession().beginTransaction();
+			getSession().save(arg0);
+			getSession().getTransaction().commit();
+		}catch(Exception e) {
+			return -1;
+		}finally {
+			getSession().close();
+		}
+		return 1;
+	}
+	
+	public static int delete(Object arg0) {
+		try {
+			getSession().beginTransaction();
+			getSession().delete(arg0);
+			getSession().getTransaction().commit();
+		}catch(Exception e) {
+			return -1;
+		}finally {
+			getSession().close();
+		}
+		return 1;
+	}
+	
+	public static Object queryOnle(String sql) {
+		Object ret = null;
+		try {
+			getSession().beginTransaction();
+			ret = getSession().createQuery(sql).uniqueResult();
+			getSession().getTransaction().commit();
+		}catch(Exception e) {
+			return null;
+		}finally {
+			getSession().close();
+		}
+		return ret;
+	}
+	
+	public static Object queryList(String sql) {
+		Object ret = null;
+		try {
+			getSession().beginTransaction();
+			ret = getSession().createQuery(sql).list();
+			getSession().getTransaction().commit();
+		}catch(Exception e) {
+			return null;
+		}finally {
+			getSession().close();
+		}
+		return ret;
+	}
 	
 	
 	
@@ -45,7 +112,7 @@ public class HibernateUtil {
 		getSession().save(a);	
 	}
 	
-	private static void bulidStaff(int id, String number, String zipData, String firsh, String second, String city, String entryDate, int departmentId, int roleId, String account, String password, String salf, String explain) {
+	private static void bulidStaff(int id, String number, String zipData, String firsh, String second, String city, String entryDate, int departmentId, int roleId, String accountNumber, String password, String salf, String explain) {
 		//添加数据
 		if(getSession().get(Staff.class, id) == null) {
 			Staff staff = new Staff();
@@ -58,31 +125,26 @@ public class HibernateUtil {
 			staff.setZipCode(zipData);
 			staff.setEntryDate(entryDate);
 			
-			Account a = null;
-			if(account !=null && password != null) {
-				a = new Account(account, password, salf, explain);
+			
+			Department department = (Department)getSession().get(Department.class, departmentId);
+			Role role = (Role)getSession().get(Role.class, roleId);
+			staff.setDepartment(department);
+			staff.setRole(role);
+			
+			
+			Account account = null;
+			if(accountNumber !=null && password != null) {
+				account = new Account(accountNumber, password, salf, explain);
+				staff.setAccount(account);	
+				account.getDepartments().add(department);
+				getSession().save(account);	
 			}
-		
 			
-			Department director = (Department)getSession().get(Department.class, departmentId);
-			
-			Role root = (Role)getSession().get(Role.class, roleId);
-			
-			bulidRela(staff, a, director, root);
-		}
-	}
-	private static void bulidRela(Staff staff, Account account, Department department, Role role) {
-		if(account != null) {
-			staff.setAccount(account);	
-			getSession().save(account);	
-			account.getDepartments().add(department);
-		}
-		
-		staff.setDepartment(department);
-		staff.setRole(role);
-		getSession().save(staff);
 
+			getSession().save(staff);
+		}
 	}
+
 	private static void initTestDate() {
 		
 		getSession().getTransaction().begin();
@@ -125,7 +187,7 @@ public class HibernateUtil {
 		}
 		
 		getSession().getTransaction().commit();
-		LogUtil.Log("[Hibernate]:写入测试数据");
+		LoggerServer.console("[Hibernate]:写入测试数据");
 		
 	}
 	
@@ -263,23 +325,23 @@ public class HibernateUtil {
 
 			//资源数据
 			
-			Node n1_1 = new Node(false, "/account/Home/home");
-			Node n1_2 = new Node(true, "/account/Home/login");
-			Node n1_3 = new Node(true, "/account/Home/deplan");
-			Node n2_1 = new Node(true, "/account/UserProfile/getInfo");
-			Node n2_2 = new Node(true, "/account/UserProfile/alterdInfo");
-			Node n3_1 = new Node(true, "/account/AccountTable/getInterior");
-			Node n3_2 = new Node(true, "/account/AccountTable/addInterior");
-			Node n3_3 = new Node(true, "/account/AccountTable/alterInterior");
-			Node n3_4 = new Node(true, "/account/AccountTable/removeInterior");
-			Node n3_5 = new Node(true, "/account/AccountTable/getSuper");
-			Node n3_6 = new Node(true, "/account/AccountTable/addSuper");
-			Node n3_7 = new Node(true, "/account/AccountTable/alterSuper");
-			Node n3_8 = new Node(true, "/account/AccountTable/removeSuper");
-			Node n3_9 = new Node(true, "/account/AccountTable/getRoot");
-			Node n3_10 = new Node(true, "/account/AccountTable/addRoot");
-			Node n3_11 = new Node(true, "/account/AccountTable/alterRoot");
-			Node n3_12 = new Node(true, "/account/AccountTable/removeRoot");
+			Node n1_1 = new Node("home", false, "/account/Home/home");
+			Node n1_2 = new Node("login", true, "/account/Home/login");
+			Node n1_3 = new Node("deplan", true, "/account/Home/deplan");
+			Node n2_1 = new Node("getInfo", true, "/account/UserProfile/getInfo");
+			Node n2_2 = new Node("alterdInfo", true, "/account/UserProfile/alterdInfo");
+			Node n3_1 = new Node("getInterior", true, "/account/AccountTable/getInterior");
+			Node n3_2 = new Node("addInterior", true, "/account/AccountTable/addInterior");
+			Node n3_3 = new Node("alterInterior", true, "/account/AccountTable/alterInterior");
+			Node n3_4 = new Node("removeInterior", true, "/account/AccountTable/removeInterior");
+			Node n3_5 = new Node("getSuper", true, "/account/AccountTable/getSuper");
+			Node n3_6 = new Node("addSuper", true, "/account/AccountTable/addSuper");
+			Node n3_7 = new Node("alterSuper", true, "/account/AccountTable/alterSuper");
+			Node n3_8 = new Node("removeSuper", true, "/account/AccountTable/removeSuper");
+			Node n3_9 = new Node("getRoot", true, "/account/AccountTable/getRoot");
+			Node n3_10 = new Node("addRoot", true, "/account/AccountTable/addRoot");
+			Node n3_11 = new Node("alterRoot", true, "/account/AccountTable/alterRoot");
+			Node n3_12 = new Node("removeRoot", true, "/account/AccountTable/removeRoot");
 			getSession().save(n1_1);
 			getSession().save(n1_2);
 			getSession().save(n1_3);

@@ -15,6 +15,7 @@
 		<property name="country"/>
 		<property name="zipCode"/>
 		<property name="entryDate"/>
+		<property name="email"/>
 	
 		<!-- 一对多 -->
 		<many-to-one name="account" class="Account" column="account_id" />
