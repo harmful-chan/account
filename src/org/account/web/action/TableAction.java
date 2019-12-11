@@ -4,121 +4,122 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.account.orm.model.Account;
-import org.account.web.viewmodel.Table;
+import org.account.orm.model.Department;
+import org.account.orm.model.Role;
+import org.account.orm.model.Staff;
+import org.account.web.model.TableContext;
 
 import com.opensymphony.xwork2.ModelDriven;
 
-public class TableAction extends ActionBase implements ModelDriven<Table>{
+public class TableAction extends ActionBase implements ModelDriven<TableContext>{
 
 	private static final long serialVersionUID = 1L;
 
-	private Table table = new Table();
-	
+	private TableContext tableContext = new TableContext();
+	List<TableContext> tables;
 	@Override
-	public Table getModel() {
-		return this.table;
+	public TableContext getModel() {
+		return this.tableContext;
 	}
 	
-	
+	public TableAction(){
+		this.tables = new ArrayList<TableContext>();
+	}
 	public String getInterior() {
-		String d = arbitrate.getCurrentActiveStaff().getDepartment();
-		String r = arbitrate.getCurrentActiveStaff().getRole();
-		String n = arbitrate.getCurrentActiveStaff().getNumber();
-		List<Account> as = arbitrate.getDepartmentAccounts(d);
-		List<Table> tables = new ArrayList<Table>();
-		for (Account account : as) {
-			Table t = new Table();
-			t.setAccount(account.getAccount());
-			t.setDeeppwd(arbitrate.encrypt(account.getPassword(), account.getSalf()));
-			t.setDepartment(d);
-			t.setRole("");
+		Department  department = staffInfo.getDepartment(active.getCurrent());
+		List<Account>  accounts = secret.getShare(department.getName());
+		
+		for (Account account : accounts) {
+			TableContext t = new TableContext();
+			t.setAccountNumber(account.getNumber());
+			t.setDeeppwd(encryption.encode(account.getPassword(), account.getSalf()));
+			t.setOwnerNumber("Share");
+			t.setOwnerDepartment(department.getName());
+			t.setOwnerRole("Share");
 			t.setExplain(account.getExplain());
-			t.setValid(arbitrate.isValid(account.getAccount()));			
-			t.setNo("");	
+			t.setValid(secret.isValid(account));			
 			tables.add(t);
 		}
-		
-		return SUCESS;
+		session.put("table_info", tables);
+		return SUCCESS;
 	}
+	
 	public String addInterior() {
-		String src = arbitrate.decode(table.getDeeppwd());
-		String password = src.substring(0, src.length()-8);
-		String salf = src.substring(src.length()-8, src.length()-1);
-		arbitrate.addDepartmentAccount(arbitrate.getCurrentActiveStaff().getDepartment(), table.getAccount(), password, salf, table.getExplain());
-		
 		return getInterior();
 	}
 	
 	public String alterInterior() {
-		String src = arbitrate.decode(table.getDeeppwd());
-		String password = src.substring(0, src.length()-8);
-		String salf = src.substring(src.length()-8, src.length()-1);
-		arbitrate.alterDepartmentAccount(arbitrate.getCurrentActiveStaff().getDepartment(), table.getAccount(), password, salf, table.getExplain());
+		Department  department = staffInfo.getDepartment(active.getCurrent());
 		
+		//密码判定
+		String deeppwd = tableContext.getDeeppwd();
+		String deep = encryption.decode(deeppwd);
+		String salf = deep.substring(deep.length()-17, deep.length());
+		String password = deep.replaceAll(salf, "");
+		
+		//Account信息
+		Account account = new Account();
+		account.setNumber(tableContext.getAccountNumber());
+		account.setPassword(password);
+		account.setExplain(tableContext.getExplain());
+		
+		//Account 存在 修改
+		//Account 不存在 添加
+		secret.addShare(account, department.getName());
 		return getInterior();
 	}
 	
 	public String removeInterior() {
-		arbitrate.removeDepartmentAccount(arbitrate.getCurrentActiveStaff().getDepartment(), table.getAccount());
+		Department  department = staffInfo.getDepartment(active.getCurrent());
+		secret.removeShare(tableContext.getAccountNumber(), department.getName());
 		return getInterior();
 	}
 	
 	public String getSuper() {
-		arbitrate.getDepartmentName(table.getNumber());
-		List<Account> accounts = arbitrate.getDepartmentAccounts(arbitrate.getDepartmentName(table.getNumber()));
-		List<Table> tables = new ArrayList<Table>();
- 		for (Account account : accounts) {
- 			List<String> nos = arbitrate.getAccountUsers(account.getAccount());
- 			if( nos != null) {
- 				for (String no : nos) {
- 					Table t = new Table();
- 					String d = arbitrate.getDepartmentName(no);
- 					String r = arbitrate.getRoleName(no);
- 					t.setAccount(account.getAccount());
- 					t.setDeeppwd(arbitrate.encrypt(account.getPassword(), account.getSalf()));
- 					t.setDepartment(d);
- 					t.setRole(r);
- 					t.setExplain(account.getExplain());
- 					t.setValid(arbitrate.isValid(account.getAccount()));			
- 					t.setNo(no);	
- 					tables.add(t);
- 				}	
- 			}else {
- 				Table t = new Table();
-				t.setAccount(account.getAccount());
-				t.setDeeppwd(arbitrate.encrypt(account.getPassword(), account.getSalf()));
-				t.setDepartment(arbitrate.getCurrentActiveStaff().getNumber());
-				t.setRole("");
-				t.setExplain(account.getExplain());
-				t.setValid(arbitrate.isValid(account.getAccount()));			
-				t.setNo(arbitrate.getCurrentActiveStaff().getDepartment());	
-				tables.add(t); 				
- 			}
- 			
-
+		
+		List<Staff> holdStaffs = staffInfo.getHold();
+		for (Staff staff : holdStaffs) {
+			Account a = staff.getAccount();
+			TableContext t = new TableContext();
+			t.setAccountNumber(a.getNumber());
+			t.setDeeppwd(encryption.encode(a.getPassword(), a.getSalf()));
+			t.setExplain(a.getExplain());
+			t.setOwnerNumber(staff.getNumber());
+			t.setOwnerRole(staff.getRole().getName());
+			t.setOwnerDepartment(staff.getDepartment().getName());
+			t.setValid(secret.isValid(a));
+			tables.add(t);
 		}
- 		session.put("table_info", tables);
- 		return SUCCESS;
+		session.put("table_info", tables);
+		return SUCCESS;
 	}
 	
 	public String addSuper() {
-		this.addInterior();
+
 		return getSuper();
 	}
 
 	public String alterSuper() {
-		String src = arbitrate.decode(table.getDeeppwd());
-		String password = src.substring(0, src.length()-8);
-		String salf = src.substring(src.length()-8, src.length()-1);
-		arbitrate.alterDepartmentAccount(table.getDepartment(), table.getAccount(), password, salf, table.getExplain());
+		//密码判定
+		String deeppwd = tableContext.getDeeppwd();
+		String deep = encryption.decode(deeppwd);
+		String salf = deep.substring(deep.length()-17, deep.length());
+		String password = deep.replaceAll(salf, "");
 		
+		//Account信息
+		String ownerNumber = this.tableContext.getOwnerNumber();
+		Account newAccount = new Account();
+		newAccount.setNumber(this.tableContext.getAccountNumber());
+		newAccount.setPassword(encryption.decode(this.tableContext.getDeeppwd()));
+		newAccount.setExplain(this.tableContext.getExplain());
+		staffInfo.addHold(ownerNumber, newAccount);
+
 		return getSuper();
 	}
-	
-	
-	public String removeSuper() {
-		arbitrate.removeDepartmentAccount(table.getDepartment(), table.getAccount());
-		return getSuper();
-	}
+//	
+//	
+//	public String removeSuper() {
+//		return getSuper();
+//	}
 	
 }

@@ -6,21 +6,14 @@ import java.util.List;
 import org.account.orm.model.*;
 import org.account.util.HibernateUtil;
 
-public class StaffImpl {
+public class StaffImpl extends EntityImpl<Staff>  {
 	public Staff findByNumber(String number) {
-		return (Staff)HibernateUtil.queryOnle("FROM Staff s WHERE s.number='"+number+"'");
+		//FROM  Staff s, Account a, Role r, Department d WHERE  s.number='"+number+"' a.id=s.account.id and r.id=s.role.id and d.id=s.department.id
+		//return (Staff)HibernateUtil.queryOnle("FROM Staff s WHERE s.number='"+number+"'");
+		Object[] ret = (Object[])HibernateUtil.queryOnly("FROM  Staff s,  Role r, Department d  WHERE  s.number='"+number+"' and r.id=s.role.id and d.id=s.department.id");
+		return ret == null ? null: (Staff)ret[0];
 	}
 	
-	
-	public Role findRoleByNumber(String number) {
-		Object[] ret =  (Object[])HibernateUtil.queryOnle("FROM Staff s LEFT JOIN s.role   WHERE s.number='"+number+"'");
-		return (Role)ret[1];
-	}
-	
-	public Department findDepartmentByNumber(String number) {
-		Object[] ret =  (Object[])HibernateUtil.queryOnle("FROM Staff s LEFT JOIN s.department  WHERE s.number='"+number+"'");
-		return (Department)ret[1];
-	}
 	
 	public List<Permission> findPrimissionsByNumber(String number) {
 		List<Object[]> objectsList =  (List<Object[]>)HibernateUtil.queryList("FROM Staff s LEFT JOIN s.role r LEFT JOIN r.permissions  WHERE s.number='"+number+"'");
@@ -40,5 +33,25 @@ public class StaffImpl {
 		return ret;
 	}
 	
+	public void updateByNumber(Staff staff) {
+		Staff s = findByNumber(staff.getNumber());
+		
+		s.setCity(staff.getCity());
+		s.setCountry(staff.getCountry());
+		s.setEmail(staff.getEmail());
+		s.setEntryDate(staff.getEntryDate());
+		s.setFirstName(staff.getFirstName());
+		s.setLastName(staff.getLastName());
+		s.setProvince(staff.getProvince());
+		s.setZipCode(staff.getZipCode());
+		modify(s);
+	}
+	
+	public List<Staff> findHold(){
+		List<Object[]> result = (List<Object[]>)HibernateUtil.queryList("FROM  Staff s, Account a, Role r, Department d WHERE a.id=s.account.id and r.id=s.role.id and d.id=s.department.id");
+		List<Staff> ret = new ArrayList<Staff>();
+		result.forEach(o -> ret.add((Staff)o[0]));
+		return ret;
+	}
 	
 }

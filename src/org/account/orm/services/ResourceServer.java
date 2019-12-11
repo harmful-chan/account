@@ -21,7 +21,7 @@ public class ResourceServer {
 	}
 	
 	public boolean isPublicResource(String url) {
-		List<Node> nodes =  this.nodeImpl.findPrivateList();
+		List<Node> nodes =  this.nodeImpl.findPublicList();
 		return isAny(nodes, url);
 	}
 	

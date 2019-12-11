@@ -1,15 +1,13 @@
 package org.account.web.interceptor;
 
 import java.util.List;
-import java.util.Map;
 
-import org.account.orm.SystemManagement;
 import org.account.orm.model.Node;
+import org.account.orm.model.Staff;
 import org.account.orm.services.*;
 import org.account.orm.services.StaffInfoServer;
 import org.account.util.HibernateUtil;
 import org.account.util.JDBCUtil;
-import org.account.web.action.ActionBase;
 import org.account.web.action.IActionable;
 import org.apache.struts2.ServletActionContext;
 
@@ -29,54 +27,62 @@ public class IdentityInterceptor  extends AbstractInterceptor{
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		//初始化[HibernateUtil]
+
 		HibernateUtil.init();
-		JDBCUtil.init();
 		
 
 		
 		//初始化服务
 		ResourceServer resource = new ResourceServer();
-		AssignedServer assigned = new AssignedServer();
 		StaffInfoServer staffInfo = new StaffInfoServer();
 		ActiveServer<String> active = new ActiveServer<String>();
-		
+		EncryptedServer encryption = new EncryptedServer();
+		SecretServer secret = new SecretServer();
 		String url = ServletActionContext.getRequest().getRequestURI();
-		String opera = (String)ServletActionContext.getRequest().getParameter("number");    //操作人
-		
-		//设置当前用户
-		active.setCurrent(opera);
-		
+
+		//注入服务
+		Object action = invocation.getAction();
+		if(action instanceof IActionable) {		
+			((IActionable) action).setSessionServer(ServletActionContext.getContext().getSession());
+			((IActionable) action).setActiveServer(active);
+			((IActionable) action).setSecretServer(secret);
+			((IActionable) action).setEncryptedServer(encryption);
+			((IActionable) action).setStaffInfoServer(staffInfo);
+		}
 		
 		//共有资源
 		boolean isPublic =  resource.isPublicResource(url);
 		if(isPublic) {
-			invocation.invoke();
+			return invocation.invoke();
+		}else {
+			//私有资源
+			boolean isPrivate = resource.isPrivateResource(url);
+			if(!isPrivate) {
+				LoggerServer.danger("访问资源无效");
+				return Action.ERROR;
+			}
+			
+			//设置当前用户
+			String operator = (String)ServletActionContext.getRequest().getParameter("operator");    //操作人
+			Staff operatorStaff =  staffInfo.getStaff(operator);
+			if(operatorStaff == null) {
+				LoggerServer.danger("操作员工不存在");
+				return Action.ERROR;
+			}
+			active.setCurrent(operator);
+			
+			
+			//判断是否允许
+			List<Node> nodes = staffInfo.getNodes(operator);
+			boolean isAllow = resource.isAny(nodes, url);
+			if(!isAllow) {
+				LoggerServer.danger("权限不足");
+				return Action.ERROR;
+			}
+			
+			return invocation.invoke();
 		}
 		
-		//私有资源
-		boolean isPrivate = resource.isPrivateResource(url);
-		if(!isPrivate) {
-			LoggerServer.danger("访问资源无效");
-			return Action.ERROR;
-		}
-		
-		
-		//判断是否允许
-		List<Node> nodes = staffInfo.getNodes(opera);
-		boolean isAllow = resource.isAny(nodes, url);
-		if(!isAllow) {
-			LoggerServer.danger("权限不足");
-			return Action.ERROR;
-		}
-		
-		
-		boolean isLogin = url.contains("Home/login");
-		if(isLogin) {
-			invocation.invoke();
-		}
-		
-		
-		return invocation.invoke();
-	}
 
+	}
 }

@@ -4,39 +4,47 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.account.orm.SystemManagement;
-import org.account.orm.model.SimpleStaff;
+import org.account.orm.services.ActiveServer;
+import org.account.orm.services.EncryptedServer;
+import org.account.orm.services.SecretServer;
+import org.account.orm.services.StaffInfoServer;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 public class ActionBase extends ActionSupport implements IActionable{
 
-	/**
-	 * 
-	 */
-	
-	public static final String PRIMARY  = "primary";
-	public static final String INFO  = "info";
-	public static final String SUCESS  = "success";
-	public static final String WARNING  = "warning";
-	public static final String DANGER  = "danger";
+
 	
 	private static final long serialVersionUID = 1L;
-	protected SystemManagement arbitrate;
-	protected HttpServletRequest request;
 	protected Map<String, Object> session;
+	protected ActiveServer<String> active;
+	protected EncryptedServer encryption;
+	protected SecretServer secret;
+	protected StaffInfoServer staffInfo;
+
 	@Override
-	public void setSystemManagement(SystemManagement sm) {
-		this.arbitrate = sm;
-		
-	}
-	@Override
-	public void setRequest(HttpServletRequest request) {
-		this.request =request;
-	}
-	@Override
-	public void setSession(Map<String, Object> session) {
+	public void setSessionServer(Map<String, Object> session) {
 		this.session = session;
+	}
+
+	@Override
+	public void setActiveServer(ActiveServer<String> active) {
+		this.active = active;
+	}
+
+	@Override
+	public void setEncryptedServer(EncryptedServer encryption) {
+		this.encryption = encryption;
+	}
+
+	@Override
+	public void setSecretServer(SecretServer secret) {
+		this.secret = secret;
+	}
+
+	@Override
+	public void setStaffInfoServer(StaffInfoServer staffInfo) {
+		this.staffInfo = staffInfo;
 	}
 
 }

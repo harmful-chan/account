@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <%  String[] msg = (String[])session.getAttribute("msg"); %>
+<%  String login_url = (String)session.getAttribute("login_url"); %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +23,7 @@
 </head>
  <body>
   <div class="wrapper"> 
-   <div class="sidebar" data-image="../assets/img/sidebar-5.jpg"> 
+   <div class="sidebar" data-image="../assets/img/sidebar-5.jpg" data-color="<%=msg[2] %>"> 
     <div class="sidebar-wrapper"> 
      <div class="logo"> 
       <a class="simple-text">Account Manager Pro</a> 
@@ -97,15 +99,15 @@
           <p class="card-category">账号30天有效</p> 
          </div> 
          <div class="card-body "> 
-          <form action="<%=session.getAttribute("login_url") %>"> 
+          <form action="<%=login_url %>"> 
            <div class="form-group"> 
             <label for="exampleInputEmail1">工号</label> 
-            <input type="test" class="form-control" placeholder="number" name="number" /> 
+            <input type="test" class="form-control" placeholder="operator" name="operator" /> 
            </div> 
            <div class="form-group"> 
             <div class="form-group"> 
              <label for="exampleInputEmail1">账号</label> 
-             <input type="test" class="form-control" placeholder="account" name="account"/> 
+             <input type="test" class="form-control" placeholder="number" name="accountNumber"/> 
             </div> 
             <div class="form-group"> 
              <label for="exampleInputPassword1">密码</label> 
@@ -158,14 +160,34 @@
     	var year = date.getFullYear();
     	var month = date.getMonth() + 1;
     	var day = date.getDate();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        var sec = date.getSeconds();
+        var ff = date.getMilliseconds();
     	if (month < 10) {
         	month = "0" + month;
     	}
     	if (day < 10) {
         	day = "0" + day;
     	}
+        if (hour < 10) {
+        	hour = "0" + hour;
+    	}
+        if (min < 10) {
+        	min = "0" + min;
+    	}
+        if (sec < 10) {
+        	sec = "0" + sec;
+    	}
+        if (ff < 10 && ff >=0) {
+        	ff = "00" + ff;
+    	}
+        
+        if(ff >=10 && ff < 100){
+            ff = "0" + ff;
+        }
     	
-    	var nowDate = year + "" + month + "" + day;
+    	 var nowDate = year + "" + month + "" + day + "" + hour + "" + min + "" + sec + "" +ff;
     	var v = document.getElementById("form_password").value;
     	var deep = v+""+nowDate;
     	

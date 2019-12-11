@@ -1,11 +1,11 @@
-package org.account.web.test;
+package org.account.web.interceptor.test;
 
 import org.account.util.HibernateUtil;
 import org.junit.Test;
 
 public class InterceptorTest{
 	public InterceptorTest() {
-		new HibernateUtil();
+		HibernateUtil.init();
 	}
 	
 	@Test

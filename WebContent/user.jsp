@@ -1,8 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="/struts-tags" prefix="s" %>
-<%@  page import="org.account.web.viewmodel.User" %>
-<%  User user = (User)session.getAttribute("user_info"); %>
+<%@  page import="org.account.web.model.UserContext" %>
+<%  String[] msg = (String[])session.getAttribute("msg"); %>
+<%
+	UserContext user = (UserContext)session.getAttribute("user_info");
+	String user_url = (String)session.getAttribute("user_url");
+	String table_url = (String)session.getAttribute("table_url");
+	String home_url = (String)session.getAttribute("home_url");
+	String deplan_url = (String)session.getAttribute("deplan_url");
+%>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -20,14 +27,14 @@
 </head>
 <body>
   <div class="wrapper"> 
-   <div class="sidebar" data-image="../assets/img/sidebar-5.jpg"> 
+   <div class="sidebar" data-image="../assets/img/sidebar-5.jpg" data-color="<%=msg[2] %>"> 
     <div class="sidebar-wrapper"> 
      <div class="logo"> 
       <a class="simple-text">Account Manager Pro</a> 
      </div> 
      <ul class="nav"> 
-      <li class="nav-item "> <a class="nav-link" href="<%=session.getAttribute("user") %>"> <i class="nc-icon nc-circle-09"></i> <p> 用 户 档 案</p> </a> </li> 
-      <li> <a class="nav-link" href="<%=session.getAttribute("table") %>"> <i class="nc-icon nc-notes"></i> <p> 账 号 列 表</p> </a> </li> 
+      <li class="nav-item "> <a class="nav-link" href="<%=user_url %>"> <i class="nc-icon nc-circle-09"></i> <p> 用 户 档 案</p> </a> </li> 
+      <li> <a class="nav-link" href="<%=table_url %>"> <i class="nc-icon nc-notes"></i> <p> 账 号 列 表</p> </a> </li> 
       <li class="nav-item active active-pro"> <a class="nav-link active" href="upgrade.html"> <i class="nc-icon nc-alien-33"></i> <p>Upgrade to PRO</p> </a> </li> 
      </ul> 
     </div> 
@@ -47,9 +54,9 @@
         <li class="nav-item"> <a class="nav-link" href="#pablo"> <span class="no-icon">Account</span> </a> </li> 
         <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="no-icon">相关操作</span> </a> 
          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"> 
-          <a class="dropdown-item" href="<%=session.getAttribute("home_url") %>">切换账号</a> 
+          <a class="dropdown-item" href="<%=home_url %>">切换账号</a> 
           <div class="divider"></div> 
-          <a class="dropdown-item" href="<%=session.getAttribute("deplan_url") %>">退出账号</a> 
+          <a class="dropdown-item" href="<%=deplan_url %>">退出账号</a> 
          </div> </li> 
        </ul> 
       </div> 
@@ -77,7 +84,7 @@
             <div class="col-md-4 px-1"> 
              <div class="form-group"> 
               <label>登录账号</label> 
-              <input type="text" class="form-control" placeholder="Account" name="account" value="<%=user.getAccount() %>"/> 
+              <input type="text" class="form-control" placeholder="Account" name="account" value="<%=user.getAccountNumber()%>"/> 
              </div> 
             </div> 
             <div class="col-md-4 pl-1"> 

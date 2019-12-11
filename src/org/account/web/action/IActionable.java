@@ -4,11 +4,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.account.orm.SystemManagement;
-import org.account.orm.model.SimpleStaff;
+import org.account.orm.services.*;
 
 public interface IActionable {
-	public void setSystemManagement(SystemManagement sm);
-	public void setRequest(HttpServletRequest request);
-	public void setSession(Map<String, Object> session);
+
+	public void setSessionServer(Map<String, Object> session);
+	public void setActiveServer(ActiveServer<String> active);
+	public void setEncryptedServer(EncryptedServer encryption);
+	public void setSecretServer(SecretServer secret);
+	public void setStaffInfoServer(StaffInfoServer staffInfo);
 }

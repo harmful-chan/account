@@ -18,8 +18,8 @@
     
     <package name="home-package" namespace="/Home" extends="account-package">
 		<action name="*" class="org.account.web.action.HomeAction" method="{1}">
-			<result>/login.jsp</result>
-			<result name="error">/login.jsp</result>
+			<result>/home.jsp</result>
+			<result name="error">/home.jsp</result>
 			<result name="welcome">/welcome.jsp</result>
 			<interceptor-ref name="identityStack"/>
 		</action>
@@ -28,14 +28,14 @@
     <package name="userprifile-package" namespace="/User" extends="account-package">
 		<action name="*" class="org.account.web.action.UserAction" method="{1}">
 			<result>/user.jsp</result>
-			<result name="error">/login.jsp</result>
+			<result name="error">/home.jsp</result>
 			<interceptor-ref name="identityStack"/>
 		</action>
     </package>
     <package name="accounttanle-package" namespace="/Table" extends="account-package">
 		<action name="*" class="org.account.web.action.TableAction" method="{1}">
 			<result>/table.jsp</result>
-			<result name="error">/login.jsp</result>
+			<result name="error">/home.jsp</result>
 			<interceptor-ref name="identityStack"/>
 		</action>
     </package>

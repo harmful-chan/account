@@ -1,8 +1,10 @@
-package org.account.web.viewmodel;
+package org.account.web.model;
 
-public class User {
+public class UserContext {
+	private String operator;
+	
 	private String company;
-	private String account;
+	private String accountNumber;
 	private String email;
 	private String department;
 	private String role;
@@ -16,17 +18,27 @@ public class User {
     private String zipCode;
     private String entryDate;
     private String other;
+    
+    
+    
+	public String getOperator() {
+		return operator;
+	}
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
 	public String getCompany() {
 		return company;
 	}
 	public void setCompany(String company) {
 		this.company = company;
 	}
-	public String getAccount() {
-		return account;
+
+	public String getAccountNumber() {
+		return accountNumber;
 	}
-	public void setAccount(String account) {
-		this.account = account;
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
 	}
 	public String getEmail() {
 		return email;

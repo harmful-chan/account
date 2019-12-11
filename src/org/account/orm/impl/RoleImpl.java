@@ -10,7 +10,7 @@ public class RoleImpl extends EntityImpl<Role> {
 	}
 
 	public Role findByName(String name) {
-		Role ret = (Role)HibernateUtil.queryOnle("FROM Role r WHERE r.name='"+name+"'");
+		Role ret = (Role)HibernateUtil.queryOnly("FROM Role r WHERE r.name='"+name+"'");
 		return ret;
 	}
 

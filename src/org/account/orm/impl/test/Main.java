@@ -1,4 +1,4 @@
-package org.account.orm.test;
+package org.account.orm.impl.test;
 
 import org.account.orm.impl.EntityImpl;
 import org.account.orm.model.Account;

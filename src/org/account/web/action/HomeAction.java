@@ -2,84 +2,78 @@ package org.account.web.action;
 
 import org.account.orm.model.Department;
 import org.account.orm.model.Role;
-import org.account.web.viewmodel.Home;
+import org.account.orm.model.Staff;
+import org.account.orm.services.LoggerServer;
+import org.account.web.model.HomeContext;
 import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ModelDriven;
 
-public class HomeAction extends ActionBase implements ModelDriven<Home>{
+public class HomeAction extends ActionBase implements ModelDriven<HomeContext>{
 	private static final long serialVersionUID = 1L;
-	private Home home = new Home();
+	private HomeContext homeRequest = new HomeContext();
 	
 	public String home() {
-		session.put("user", "#");
-		session.put("table", "#");
+		session.put("user_url", "#");
+		session.put("table_url", "#");
 		session.put("home_url", "http://localhost:8080/account/Home/home");
 		session.put("login_url", "http://localhost:8080/account/Home/login");
 		session.put("deplan_url", "#");
-		session.put("msg", new String[] {INFO, "请先登陆公司内部提供的帐号,非内部人人员不允许使用本系统"});
+		LoggerServer.info("请先登陆公司内部提供的帐号,非内部人人员不允许使用本系统");
 		return SUCCESS;
 	}
 	public String login() {
 		
-		String deeppwd = home.getDeeppwd();
-		String deep = arbitrate.decode(deeppwd);
-		String salf = deep.substring(deep.length()-8, deep.length());
+		String deeppwd = homeRequest.getDeeppwd();
+		String deep = encryption.decode(deeppwd);
+		String salf = deep.substring(deep.length()-17, deep.length());
 		String password = deep.replaceAll(salf, "");
-		String dst = arbitrate.getAccountPassword(home.getAccount());
+		String dst = secret.getAccountPassword(homeRequest.getAccountNumber());
 		
 		if(!password.equals(dst)) {
-			session.put("login_url", "http://localhost:8080/account/Home/login");
-			session.put("msg", new String[] {DANGER, "密码不正确"});
-			return SUCCESS;
+			return ERROR;
 		}else {
-			arbitrate.addActiveStaff(home.getNumber());
-			String department = arbitrate.getCurrentActiveStaff().getDepartment();
-			String role = arbitrate.getCurrentActiveStaff().getRole();
-			String number = arbitrate.getCurrentActiveStaff().getNumber();
+			active.addActive(active.getCurrent());
+			Role role = staffInfo.getRole(active.getCurrent());
+			Staff staff = staffInfo.getStaff(active.getCurrent());
 			//管理部门管理员以上
-			if(department.equals(Department.MANAGERMENT) && (role.equals(Role.ADMINISTRATOR) || role.equals(Role.ROOT))) {
-				session.put("table", "http://localhost:8080/account/AccountTable/getSuper?number="+number);	
-				session.put("table_add", "http://localhost:8080/account/AccountTable/addSuper");
-				session.put("table_alter", "http://localhost:8080/account/AccountTable/alterSuper");
-				session.put("table_remove", "http://localhost:8080/account/AccountTable/removeSuper");
-			}else if(department.equals(Department.DIRECTOR)) {
-				session.put("table", "http://localhost:8080/account/AccountTable/getRoot?number="+number);	
-				session.put("table_add", "http://localhost:8080/account/AccountTable/addRoot");
-				session.put("table_alter", "http://localhost:8080/account/AccountTable/alterRoot");
-				session.put("table_remove", "http://localhost:8080/account/AccountTable/removeRoot");
-			}else {
-				session.put("table", "http://localhost:8080/account/AccountTable/getInterior?number="+number);	
-				session.put("table_add", "http://localhost:8080/account/AccountTable/addInterior");
-				session.put("table_alter", "http://localhost:8080/account/AccountTable/alterInterior");
-				session.put("table_remove", "http://localhost:8080/account/AccountTable/removeInterior");	
-				if(role.equals(Role.NORMAL)){	
-					session.put("table_add", "#");
-					session.put("table_alter", "#");
-					session.put("table_remove", "#");	
-				}else if(role.equals(Role.GOVERNOR)) {
-					session.put("table_alter", "#");
-					session.put("table_remove", "#");
-				}else if(role.equals(Role.ADMINISTRATOR)) {
-					session.put("table_remove", "#");
-				}
+			if(role.getName().equals(Role.ROOT)) {    //董事长
+				session.put("table_url", "http://localhost:8080/account/Table/getRoot?operator="+staff.getNumber());	
+				session.put("table_add", "http://localhost:8080/account/Table/addRoot?operator="+staff.getNumber());
+				session.put("table_alter", "http://localhost:8080/account/Table/alterRoot?operator="+staff.getNumber());
+				session.put("table_remove", "http://localhost:8080/account/Table/removeRoot?operator="+staff.getNumber());
+			}else if(role.getName().equals(Role.ADMINISTRATOR)) {
+				session.put("table_url", "http://localhost:8080/account/Table/getSuper?operator="+staff.getNumber());	
+				session.put("table_add", "http://localhost:8080/account/Table/addSuper?operator="+staff.getNumber());
+				session.put("table_alter", "http://localhost:8080/account/Table/alterSuper?operator="+staff.getNumber());
+				session.put("table_remove", "http://localhost:8080/account/Table/removeSuper?operator="+staff.getNumber());
+			}else if(role.getName().equals(Role.GOVERNOR)) {
+				session.put("table_url", "http://localhost:8080/account/Table/getInterior?operator="+staff.getNumber());	
+				session.put("table_add", "http://localhost:8080/account/Table/addInterior?operator="+staff.getNumber());
+				session.put("table_alter", "http://localhost:8080/account/Table/alterInterior?operator="+staff.getNumber());
+				session.put("table_remove", "http://localhost:8080/account/Table/removeInterior?operator="+staff.getNumber());	
+			}else if(role.getName().equals(Role.NORMAL)) {
+				session.put("table_url", "http://localhost:8080/account/Table/getInterior?operator="+staff.getNumber());	
+				session.put("table_add", "#");
+				session.put("table_alter", "#");
+				session.put("table_remove", "#");
 			}
-			
-			session.put("user", "http://localhost:8080/account/UserProfile/getInfo?number="+number);
-			session.put("deplan_url", "http://localhost:8080/account/Home/deplan?number="+number);
-			session.put("login_info", home);
-			session.put("msg", new String[] {SUCESS, "欢迎"+number});
+			session.put("login_info", homeRequest);
+			session.put("user_url", "http://localhost:8080/account/User/getInfo?operator="+staff.getNumber());
+			session.put("deplan_url", "http://localhost:8080/account/Home/deplan?operator="+staff.getNumber());
+			LoggerServer.success("欢迎员工登录，工号："+staff.getNumber());
 		}
 		return "welcome";
 	}
 	
 	public String deplan() {
-		arbitrate.removeActiveStaff(home.getNumber());
-		session.put("msg", new String[] {SUCESS, "工号"+arbitrate.getCurrentActiveStaff().getNumber()+"退出成功"});
+		active.removeActive(homeRequest.getOperator());
+		Staff staff = staffInfo.getStaff(active.getCurrent());
+		LoggerServer.success("工号："+staff.getNumber()+"退出成功");
 		return SUCCESS;
 	}
 	@Override
-	public Home getModel() {
-		return this.home;
+	public HomeContext getModel() {
+		return this.homeRequest;
 	}
 }
