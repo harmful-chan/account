@@ -3,8 +3,8 @@ package org.account.orm.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.account.orm.bean.Node;
 import org.account.orm.impl.NodeImpl;
-import org.account.orm.model.Node;
 
 public class ResourceServer {
 	private NodeImpl nodeImpl = null;

@@ -3,10 +3,14 @@ package org.account.orm.services;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActiveServer<T> {
-	private List<T> activeList = new ArrayList<T>();
-	private T currentActive;
+import org.account.orm.bean.Staff;
 
+public class ActiveServer<T extends Staff> {
+	private List<T> activeList;
+	private T currentActive;
+	public ActiveServer(){
+		this.activeList = new ArrayList<T>();
+	}
 	public T getCurrent() {
 		return this.currentActive;
 	}
@@ -14,12 +18,22 @@ public class ActiveServer<T> {
 		this.currentActive = t;
 	}
 	public boolean isActive(T t) {
-		
-		return this.activeList.contains(t);
+		Staff s = (Staff)t;
+		List<Staff> ss = (List<Staff>)activeList;
+		boolean flag = false;
+		for (Staff staff : ss) {
+			if(staff.getNumber().equals(s.getNumber())) {
+				flag = true;
+				break;
+			}
+		}
+		return flag;
 	}
 	
 	public void addActive(T t) {
-		this.activeList.add(t);
+		if(!isActive(t)) {
+			this.activeList.add(t);	
+		}
 	}
 	public List<T> getActiveList(){
 		return this.activeList;

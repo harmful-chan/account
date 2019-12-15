@@ -2,14 +2,10 @@ package org.account.web.action;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import org.account.orm.bean.*;
+import org.account.web.bean.UserContext;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import org.account.orm.model.*;
-import org.account.web.model.TableContext;
-import org.account.web.model.UserContext;
-import org.apache.struts2.ServletActionContext;
-
-import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
 public class UserAction  extends ActionBase implements ModelDriven<UserContext> {
@@ -21,19 +17,17 @@ public class UserAction  extends ActionBase implements ModelDriven<UserContext> 
 		return this.userRequest;
 	}
 	
-	public String getInfo() {
+	@SkipValidation
+	public String getInfo() throws Exception {
 		
-		Staff  staff = staffInfo.getStaff(active.getCurrent());
-		Role  role = staffInfo.getRole(active.getCurrent());
-		Department  department = staffInfo.getDepartment(active.getCurrent());
-		Account  account = staffInfo.getAccount(active.getCurrent());
-		List<Permission> permissions = staffInfo.getPermissions(active.getCurrent());
+		Staff  staff = info.getHoldStaffInfo(active.getCurrent().getNumber());
+		List<Permission> permissions = info.getStaffPermissions(staff.getNumber());    //获取权限码
 		
 		UserContext uvm = new UserContext();
-		uvm.setNumber(staff.getNumber());
-		uvm.setAccountNumber(account.getNumber());
-		uvm.setRole(role.getName());
-		uvm.setDepartment(department.getName());
+		uvm.setOperator(staff.getNumber());
+		uvm.setAccountNumber(staff.getAccount().getNumber());
+		uvm.setRole(staff.getRole().getExplain());
+		uvm.setDepartment(staff.getDepartment().getExplain());
 		uvm.setEntryDate(staff.getEntryDate());
 		uvm.setCountry(staff.getCountry());
 		uvm.setProvince(staff.getProvince());
@@ -41,31 +35,24 @@ public class UserAction  extends ActionBase implements ModelDriven<UserContext> 
 		uvm.setZipCode(staff.getZipCode());
 		uvm.setFirstName(staff.getFirstName());
 		uvm.setLastName(staff.getLastName());
-		
-		String pStr = "";
-		
-		for (Permission permission : permissions) {
-			pStr += permission.getCode() + ".";
-		}
-		uvm.setPermissioms(pStr);
-		
+		uvm.setEmail(staff.getEmail());
+		uvm.setPermissioms(permissions.toString());
 		session.put("user_info", uvm);
-		session.put("user_update_url", "http://localhost:8080/account/UserProfile/alterdInfo");
+		session.put("user_update_url", "http://localhost:8080/account/User/alterdInfo");
+		flashUrl(staff);
 		return SUCCESS;
 	}
 	
-	public String alterdInfo() {
+	public String alterdInfo() throws Exception {
 		Staff s = new Staff();
-		s.setNumber(userRequest.getNumber());
+		s.setNumber(userRequest.getOperator());
 		s.setCity(userRequest.getCity());
 		s.setCountry(userRequest.getCountry());
+		s.setProvince(userRequest.getProvince());
 		s.setEmail(userRequest.getEmail());
 		s.setEntryDate(userRequest.getEntryDate());
-		s.setFirstName(userRequest.getFirstName());
-		s.setLastName(userRequest.getLastName());
-		s.setProvince(userRequest.getProvince());
-		s.setZipCode(userRequest.getEntryDate());
-		staffInfo.alterStaffByNumber(s);
+		s.setZipCode(userRequest.getZipCode());
+		info.updateStaffInfo(s);
 		return getInfo();
 	}
 }

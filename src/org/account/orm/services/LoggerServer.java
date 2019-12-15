@@ -15,6 +15,9 @@ public class LoggerServer {
 	public static void console(Object msg) {
 		System.out.println(msg);
 	}
+	public static boolean haveMsg() {
+		return ServletActionContext.getContext().getSession().containsKey("msg");
+	}
 	public static void primary(String msg) {
 		ServletActionContext.getContext().getSession().put("msg", new String[] {PRIMARY, msg, "purple"});
 	}

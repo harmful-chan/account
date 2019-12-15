@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.2//EN" "http://struts.apache.org/dtds/xwork-validator-1.0.2.dtd">
+
+<validators >
+	<field name="operator">
+		<field-validator type="requiredstring">
+			<param name="trim">true</param>
+			<message>操作员工号码不能为空</message>
+		</field-validator>
+        <field-validator type="stringlength">
+			<param name="minLength">10</param>
+	        <param name="maxLength">10</param>
+			<message>员工号码长度10位，A开头，如:AXXX...</message>
+		</field-validator>
+	</field>
+	<field name="accountNumber" >
+		<field-validator type="requiredstring">
+			<param name="trim">true</param>
+			<message>账号不能为空</message>
+		</field-validator>
+        <field-validator type="stringlength">
+			<param name="minLength">6</param>
+			<param name="maxLength">16</param>
+			<message>登录账号6~16位</message>
+		</field-validator>
+	</field>
+	<field name="deeppwd" >
+		<field-validator type="requiredstring">
+			<param name="trim">true</param>
+			<message>密码不能为空</message>
+		</field-validator>
+	</field>	
+</validators>

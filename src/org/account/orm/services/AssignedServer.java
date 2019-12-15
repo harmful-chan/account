@@ -1,6 +1,6 @@
 package org.account.orm.services;
 
-import org.account.orm.model.*;
+import org.account.orm.bean.*;
 import org.account.util.HibernateUtil;
 
 

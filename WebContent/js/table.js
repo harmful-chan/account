@@ -13,12 +13,12 @@ btnAdd.addEventListener("click",function () {
    let tb8 = document.createElement("td");
    let tb9 = document.createElement("td");
    let tb10 = document.createElement("td");
-   tb10.innerHTML = `<input type="text" class="form-control hour">`;
-   tb9.innerHTML =  `<span/>`;
-   tb8.innerHTML =  `<span/>`;
-   tb7.innerHTML =  `<span/>`;
-   tb6.innerHTML =  `<input type="text" class="form-control three">`;
-   tb5.innerHTML =  `<span/>`;
+   tb10.innerHTML = `*`;
+   tb9.innerHTML =  `*`;
+   tb8.innerHTML =  `*`;
+   tb7.innerHTML =  `<input type="text" class="form-control four">`;
+   tb6.innerHTML =  `*`;
+   tb5.innerHTML =  `<input type="text" class="form-control three">`;
    tb4.innerHTML =  `<input type="text" class="form-control two">`;
    tb3.innerHTML =  `<input type="text" class="form-control one">`;
    tb2.innerHTML =  `*`;
@@ -38,20 +38,20 @@ btnAdd.addEventListener("click",function () {
 
 
 /*修改用户数据*/
-password = Array.from(document.querySelectorAll(".password"));
+/*password = Array.from(document.querySelectorAll(".password"));
 for (let i in password){
    password[i].ondblclick = function () {
-      this.innerHTML = `<input type="text" value="${decode(this.textContent)}">`;
+      this.innerHTML = `<input type="text" >`;
       this.children[0].onblur = function () {
          var str = this.value;
-         this.parentNode.innerHTML = encode(str);
+         this.parentNode.innerHTML = str;
       }
    }
-}
+}*/
 
 
 /*修改用户数据*/
-text = Array.from(document.querySelectorAll(".text"));
+/*text = Array.from(document.querySelectorAll(".text"));
 for (let i in text){
    text[i].ondblclick = function () {
       this.innerHTML = `<input type="text" value="${this.textContent}">`;
@@ -60,7 +60,28 @@ for (let i in text){
          this.parentNode.innerHTML = str;
       }
    }
-}
+}*/
+
+/*删除数据*/
+const btnRemove = document.querySelector(".btn-danger");
+btnRemove.addEventListener("click",function () {
+	   let c = document.querySelectorAll(".form-check-input")
+	   let checks = Array.from(c);
+	   for (let i in checks){
+			 if (checks[i].checked) {
+				let parentTr = checks[i].parentNode.parentNode.parentNode.parentNode.children;
+				const accountNumber = parentTr[3].innerText;
+				const ownerNumber = parentTr[6].innerText;
+				var u = document.getElementById("table_remove");
+				u = u.innerHTML;
+				alert(u);
+				var url = "&accountNumber="+accountNumber+"&deeppwd=nonepassowrd&ownerNumber="+ownerNumber+"&explain=noneexplain";
+				console.log(u + url);
+				location.href = u + url;
+			 }
+	   }  
+
+});
 
 /*保存用户数据*/
 const btnUpdate = document.querySelector(".btn-warning");
@@ -68,111 +89,31 @@ const btnUpdate = document.querySelector(".btn-warning");
 btnUpdate.addEventListener("click",function () {
    let insert = document.querySelector(".last");
    if(insert != null){
-      const one = document.querySelector(".one");
-      const two = document.querySelector(".two");
-      const three = document.querySelector(".three");
-      const four = document.querySelector(".four");
+      const explain = document.querySelector(".one");
+      const accountNumber = document.querySelector(".two");
+      const password = document.querySelector(".three");
+      const ownerNumber = document.querySelector(".four");
       var u = document.getElementById("table_alter");
 	  u = u.innerHTML;
 	  alert(u);
-	  var url = `&accountNumber=${one.value}&deeppwd=${encode(two.value)}&ownerNumber=${three.value}&explain=${three.value}`;
+	  var url = `&explain=${explain.value}&accountNumber=${accountNumber.value}&deeppwd=${encode(password.value)}&ownerNumber=${ownerNumber.value}`;
 		console.log(u + url);
          location.href = u + url;
-   }else{
-		let c = document.querySelectorAll(".form-check-input")
-	   let checks = Array.from(c);
-	   for (let i in checks){
-			 if (checks[i].checked) {
-				let parentTr = checks[i].parentNode.parentNode.parentNode.parentNode.children;
-				const accountNumber = parentTr[2].innerText;
-				const deeppwd = parentTr[3].innerText;
-				const ownerDepartment= parentTr[5].innerText;
-				const ownerRole = parentTr[6].innerText;
-				const ownerNumber = parentTr[7].innerText;
-				const valid = parentTr[8].innerText;
-				const explain = parentTr[9].innerText;
-				
-				var u = document.getElementById("table_alter");
-				u = u.innerHTML;
-				alert(u);
-				var url = "&accountNumber="+accountNumber+"&deeppwd="+deeppwd+"&ownerDepartment="+ownerDepartment+"&ownerRole="+ownerRole+"&ownerNumber="+ownerNumber+"&explain="+explain;
-						  
-				
-						  
-				console.log(u + url);
-				location.href = u + url;
-			 }
-	   }  
    }
-	
-
 });
 
 
 function over(id){
     var pass = document.getElementById(id);
-	console.log(pass.innerHTML);
-    pass.innerHTML = decode(pass.innerHTML); 
-}
-
-function on(id, str){
-	var sp = document.getElementById(id);
-	sp.innerHTML = str;
-	console.log(sp.innerHTML);
+	console.log(pass.type);
+	pass.type="text";
+    pass.value = decode(pass.value); 
 }
 
 function out(id){
     var pass = document.getElementById(id);
-    pass.innerHTML = encode(pass.innerHTML);
+    console.log(pass.type);
+	pass.type="password";
+	pass.value = encode(pass.value); 
 }
 
-//解码
-function encode(password){
-	var date = new Date();
-	var year = date.getFullYear();
-	var month = date.getMonth() + 1;
-	var day = date.getDate();
-	var hour = date.getHours();
-	var min = date.getMinutes();
-	var sec = date.getSeconds();
-	var ff = date.getMilliseconds();
-	if (month < 10) {
-		month = "0" + month;
-	}
-	if (day < 10) {
-		day = "0" + day;
-	}
-	if (hour < 10) {
-		hour = "0" + hour;
-	}
-	if (min < 10) {
-		min = "0" + min;
-	}
-	if (sec < 10) {
-		sec = "0" + sec;
-	}
-	if (ff < 10 && ff >=0) {
-		ff = "00" + ff;
-	}
-	
-	if(ff >=10 && ff < 100){
-		ff = "0" + ff;
-	}
-	
-	var nowDate = year + "" + month + "" + day + "" + hour + "" + min + "" + sec + "" +ff;
-	var deep = password+""+nowDate;
-	
-	var deeppwd = window.btoa(deep);
-	
-	return deeppwd;
-}  	
-
-
-function decode(deeppwd){
-    var deep = window.atob(deeppwd);
-    
-    var salt = deep.substring(deep.length-17, deep.length);
-    var password = deep.replace(salt, "");
-    
-    return password;
-}

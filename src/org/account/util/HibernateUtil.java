@@ -4,8 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.account.orm.model.*;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.account.orm.bean.*;
 import org.account.orm.services.AssignedServer;
 import org.account.orm.services.LoggerServer;
 import org.hibernate.Session;
@@ -28,16 +28,16 @@ public class HibernateUtil {
 	
 	public static void init() {
 		if(!isInit) {
-			LoggerServer.console("[Hibernate]:读取配置文件]");
+			LoggerServer.console("Hibernate:读取配置文件");
 			Configuration cfg = new Configuration().configure();
 			
-			LoggerServer.console("[Hibernate]:建立会话工厂");
+			LoggerServer.console("Hibernate:建立会话工厂");
 			sessionFactory = cfg.buildSessionFactory();
 			
-			LoggerServer.console("[Hibernate]:数据写入核心数据");
+			LoggerServer.console("Hibernate:数据写入核心数据");
 			initCoreData();
 			
-			LoggerServer.console("[Hibernate]:数据写入测试数据数据");
+			LoggerServer.console("Hibernate:数据写入测试数据数据");
 			initTestDate();
 			
 			isInit= true;
@@ -129,7 +129,7 @@ public class HibernateUtil {
 	}
 	
 
-	private static void bulidData(int id, String number, String zipData, String firsh, String second, String city, String entryDate, int departmentId, int roleId, String accountNumber, String password, String salf, String explain) {
+	private static void bulidData(int id, String number, String zipData, String firsh, String second, String city, String entryDate, String email, int departmentId, int roleId, String accountNumber, String password, String salf, String explain) {
 		//添加数据
 		if(number != null) {
 			Staff staff = new Staff();
@@ -141,6 +141,7 @@ public class HibernateUtil {
 			staff.setCity("guangzhou");
 			staff.setZipCode(zipData);
 			staff.setEntryDate(entryDate);
+			staff.setEmail(email);
 			
 			
 			Department department = (Department)getSession().get(Department.class, departmentId);
@@ -153,7 +154,6 @@ public class HibernateUtil {
 			if(accountNumber !=null && password != null) {
 				Account  account = new Account(accountNumber, password, salf, explain);
 				staff.setAccount(account);	
-				account.getDepartments().add(department);
 				getSession().save(account);	
 			}
 			
@@ -168,49 +168,49 @@ public class HibernateUtil {
 	}
 
 	private static void initTestDate() {
-		
 		getSession().getTransaction().begin();
 		boolean flag = getSession().get(Staff.class, 1) == null;
 		flag &=  getSession().get(Account.class, 1) == null;
 		if(flag) {
 			String curr = (new SimpleDateFormat("yyyyMMddHHmmssSSS")).format(new Date());
-			bulidData(1,  "A000010000", "511400",   "chan",      "harmful",    "guangzhou", "20191201", 5, 4, "0000000000", "000000", curr, "测试帐号");
-			bulidData(2,  "A000010001", "19530902", "Georgi",    "Facello",    "M",         "19860626", 5, 4, "0000000001", "000001", curr, "测试帐号");
-			bulidData(3,  "A000010002", "19640602", "Bezalel",   "Simmel",     "F",         "19851121", 4, 3, "0000000002", "000002", curr, "测试帐号");
-			bulidData(4,  "A000010003", "19591203", "Parto",     "Bamford",    "M",         "19860828", 4, 2, "0000000003", "000003", curr, "测试帐号");
-			bulidData(5,  "A000010004", "19540501", "Chirstian", "Koblick",    "M",         "19861201", 4, 2, null, null, null, null);
-			bulidData(6,  "A000010005", "19550121", "Kyoichi",   "Maliniak",   "M",         "19890912", 4, 1, null, null, null, null);
-			bulidData(7,  "A000010006", "19530420", "Anneke",    "Preusig",    "F",         "19890602", 3, 2, "0000000004", "000004", curr, "测试帐号");
-			bulidData(8,  "A000010007", "19570523", "Tzvetan",   "Zielinski",  "F",         "19890210", 3, 2, null, null, null, null);
-			bulidData(9,  "A000010008", "19580219", "Saniya",    "Kalloufi",   "M",         "19940915", 3, 2, null, null, null, null);
-			bulidData(10, "A000010009", "19520419", "Sumant",    "Peac",       "F",         "19850218", 3, 2, null, null, null, null);
-			bulidData(11, "A000010010", "19630601", "Duangkaew", "Piveteau",   "F",         "19890824", 3, 2, null, null, null, null);
-			bulidData(12, "A000010011", "19531107", "Mary",      "Sluis",      "F",         "19900122", 3, 1, null, null, null, null);
-			bulidData(13, "A000010012", "19601004", "Patricio",  "Bridgland",  "M",         "19921218", 3, 1, null, null, null, null);
-			bulidData(14, "A000010013", "19630607", "Eberhardt", "Terkki",     "M",         "19851020", 3, 1, "0000000005", "000005", curr, "测试帐号");
-			bulidData(15, "A000010014", "19560212", "Berni",     "Genin",      "M",         "19870311", 2, 3, null, null, null, null);
-			bulidData(16, "A000010015", "19590819", "Guoxiang",  "Nooteboom",  "M",         "19870702", 2, 3, null, null, null, null);
-			bulidData(17, "A000010016", "19610502", "Kazuhito",  "Cappelletti","M",         "19950127", 2, 2, null, null, null, null);
-			bulidData(18, "A000010017", "19580706", "Cristinel", "Bouloucos",  "F",         "19930803", 2, 2, "0000000006", "000006", curr, "测试帐号");
-			bulidData(19, "A000010018", "19540619", "Kazuhide",  "Peha",       "F",         "19870403", 2, 1, null, null, null, null);
-			bulidData(20, "A000010019", "19530123", "Lillian",   "Haddadi",    "M",         "19990430", 2, 1, null, null, null, null);
-			bulidData(21, "A000010020", "19521224", "Mayuko",    "Warwick",    "M",         "19910126", 2, 1, null, null, null, null);
-			bulidData(22, "A000010021", "19600220", "Ramzi",     "Erde",       "M",         "19880210", 2, 1, null, null, null, null);
-			bulidData(23, "A000010022", "19520708", "Shahaf",    "Famili",     "M",         "19950822", 2, 1, null, null, null, null);
-			bulidData(24, "A000010023", "19530929", "Bojan",     "Montemayor", "F",         "19891217", 1, 3, null, null, null, null);
-			bulidData(25, "A000010024", "19580905", "Suzette",   "Pettey",     "F",         "19970519", 1, 3, null, null, null, null);
-			bulidData(26, "A000010025", "19581031", "Prasadram", "Heyers",     "M",         "19870817", 1, 2, null, null, null, null);
-			bulidData(27, "A000010026", "19530403", "Yongqiao",  "Berztiss",   "M",         "19950320", 1, 2, null, null, null, null);
-			bulidData(28, "A000010027", "19620710", "Divier",    "Reistad",    "F",         "19890707", 1, 1, null, null, null, null);
-			bulidData(29, "A000010028", "19631126", "Domenick",  "Tempesti",   "M",         "19911022", 1, 1, null, null, null, null);
-			bulidData(30, "A000010029", "19561213", "Otmar",     "Herbst",     "M",         "19851120", 1, 1, null, null, null, null);
-			bulidData(31, "A000010030", "19580714", "Elvis",     "Demeyer",    "M",         "19940217", 1, 1, null, null, null, null);
+			bulidData(1,  "A000010000", "511400", "chan",      "harmful",    "guangzhou", "2019-12-01", "1148706823@qq.com", 5, 4, "0000000000", "000000", curr, "测试帐号");
+			bulidData(2,  "A000010001", "530902", "Georgi",    "Facello",    "M",         "1986-06-26", "1148706823@qq.com", 5, 4, "0000000001", "000001", curr, "测试帐号");
+			bulidData(3,  "A000010002", "640602", "Bezalel",   "Simmel",     "F",         "1985-11-21", "1148706823@qq.com", 4, 3, "0000000002", "000002", curr, "测试帐号");
+			bulidData(4,  "A000010003", "591203", "Parto",     "Bamford",    "M",         "1986-08-28", "1148706823@qq.com", 4, 3, "0000000003", "000003", curr, "测试帐号");
+			bulidData(5,  "A000010004", "540501", "Chirstian", "Koblick",    "M",         "1986-12-01", "1148706823@qq.com", 4, 2, "0000000004", "000004", curr, "测试帐号");
+			bulidData(6,  "A000010005", "550121", "Kyoichi",   "Maliniak",   "M",         "1989-09-12", "1148706823@qq.com", 4, 1, "0000000005", "000005", curr, "测试帐号");
+			bulidData(7,  "A000010006", "530420", "Anneke",    "Preusig",    "F",         "1989-06-02", "1148706823@qq.com", 3, 2, "0000000006", "000006", curr, "测试帐号");
+			bulidData(8,  "A000010007", "570523", "Tzvetan",   "Zielinski",  "F",         "1989-02-10", "1148706823@qq.com", 3, 1, null, null, null, null);
+			bulidData(9,  "A000010008", "580219", "Saniya",    "Kalloufi",   "M",         "1994-09-15", "1148706823@qq.com", 2, 2, null, null, null, null);
+			bulidData(10, "A000010009", "520419", "Sumant",    "Peac",       "F",         "1985-02-18", "1148706823@qq.com", 2, 1, null, null, null, null);
+			bulidData(11, "A000010010", "630601", "Duangkaew", "Piveteau",   "F",         "1989-08-24", "1148706823@qq.com", 1, 2, null, null, null, null);
+			bulidData(12, "A000010011", "531107", "Mary",      "Sluis",      "F",         "1990-01-22", "1148706823@qq.com", 1, 1, null, null, null, null);
+			bulidData(13, "A000010012", "601004", "Patricio",  "Bridgland",  "M",         "1992-12-18", "1148706823@qq.com", 3, 1, null, null, null, null);
+			bulidData(14, "A000010013", "630607", "Eberhardt", "Terkki",     "M",         "1985-10-20", "1148706823@qq.com", 3, 1, null, null, null, null);
+			bulidData(15, "A000010014", "560212", "Berni",     "Genin",      "M",         "1987-03-11", "1148706823@qq.com", 2, 2, null, null, null, null);
+			bulidData(16, "A000010015", "590819", "Guoxiang",  "Nooteboom",  "M",         "1987-07-02", "1148706823@qq.com", 2, 2, null, null, null, null);
+			bulidData(17, "A000010016", "610502", "Kazuhito",  "Cappelletti","M",         "1995-01-27", "1148706823@qq.com", 2, 2, null, null, null, null);
+			bulidData(18, "A000010017", "580706", "Cristinel", "Bouloucos",  "F",         "1993-08-03", "1148706823@qq.com", 2, 2, null, null, null, null);
+			bulidData(19, "A000010018", "540619", "Kazuhide",  "Peha",       "F",         "1987-04-03", "1148706823@qq.com", 2, 1, null, null, null, null);
+			bulidData(20, "A000010019", "530123", "Lillian",   "Haddadi",    "M",         "1999-04-30", "1148706823@qq.com", 2, 1, null, null, null, null);
+			bulidData(21, "A000010020", "521224", "Mayuko",    "Warwick",    "M",         "1991-01-26", "1148706823@qq.com", 2, 1, null, null, null, null);
+			bulidData(22, "A000010021", "600220", "Ramzi",     "Erde",       "M",         "1988-02-10", "1148706823@qq.com", 2, 1, null, null, null, null);
+			bulidData(23, "A000010022", "520708", "Shahaf",    "Famili",     "M",         "1995-08-22", "1148706823@qq.com", 2, 1, null, null, null, null);
+			bulidData(24, "A000010023", "530929", "Bojan",     "Montemayor", "F",         "1989-12-17", "1148706823@qq.com", 1, 2, null, null, null, null);
+			bulidData(25, "A000010024", "580905", "Suzette",   "Pettey",     "F",         "1997-05-19", "1148706823@qq.com", 1, 2, null, null, null, null);
+			bulidData(26, "A000010025", "581031", "Prasadram", "Heyers",     "M",         "1987-08-17", "1148706823@qq.com", 1, 2, null, null, null, null);
+			bulidData(27, "A000010026", "530403", "Yongqiao",  "Berztiss",   "M",         "1995-03-20", "1148706823@qq.com", 1, 2, null, null, null, null);
+			bulidData(28, "A000010027", "620710", "Divier",    "Reistad",    "F",         "1989-07-07", "1148706823@qq.com", 1, 1, null, null, null, null);
+			bulidData(29, "A000010028", "631126", "Domenick",  "Tempesti",   "M",         "1991-10-22", "1148706823@qq.com", 1, 1, null, null, null, null);
+			bulidData(30, "A000010029", "561213", "Otmar",     "Herbst",     "M",         "1985-11-20", "1148706823@qq.com", 1, 1, null, null, null, null);
+			bulidData(31, "A000010030", "580714", "Elvis",     "Demeyer",    "M",         "1994-02-17", "1148706823@qq.com", 1, 1, null, null, null, null);
 			
-			for (int i = 7; i < 50; i++) {
-				bulidData(i, null, null, null, null, null, null, (i % 5)+1, 0, 
-						"00000000"+ ((i<10)? "0"+i: i), 
-						"0000"+ ((i<10)? "0"+i: i), 
-						curr, "测试帐号");	
+			for (int i = 0; i < 10; i++) {
+				bulidData(i, null, null, null, null, null, null, null, (i%5)+1, 0, RandomStringUtils.random(8, false, true),  RandomStringUtils.random(13, true, true), curr, "格格网(http://emuch.net)");
+				bulidData(i, null, null, null, null, null, null, null, (i%5)+1, 0, RandomStringUtils.random(9, false, true),  RandomStringUtils.random(9, true, true), curr, "(http://gege521.com）");	
+				bulidData(i, null, null, null, null, null, null, null, (i%5)+1, 0, RandomStringUtils.random(10, false, true),  RandomStringUtils.random(12, true, true), curr, "国家自然科学基金(http://www.nsfc.gov.cn)");	
+				bulidData(i, null, null, null, null, null, null, null, (i%5)+1, 0, RandomStringUtils.random(11, false, true),  RandomStringUtils.random(11, true, true), curr, "(http://211.68.23.76/a.asp)");	
+				bulidData(i, null, null, null, null, null, null, null, (i%5)+1, 0, RandomStringUtils.random(12, false, true),  RandomStringUtils.random(8, true, true), curr, "华军软件园（http://www.newhua.com/）");	
 			}
 		}
 		getSession().getTransaction().commit();		
@@ -230,8 +230,8 @@ public class HibernateUtil {
 			//职位数据
 			Role normal        = (new Role(Role.NORMAL, "普通员工"));
 			Role governor      = (new Role(Role.GOVERNOR, "部门经理"));
-			Role administrator = (new Role(Role.ADMINISTRATOR, "后台管理员"));
-			Role root          = (new Role(Role.ROOT, "最高管理员"));
+			Role administrator = (new Role(Role.ADMINISTRATOR, "账号管理员"));
+			Role root          = (new Role(Role.ROOT, "超级管理员"));
 
 			//权限数据
 			

@@ -2,7 +2,7 @@ package org.account.orm.services.test;
 
 import java.util.List;
 
-import org.account.orm.model.Account;
+import org.account.orm.bean.Account;
 import org.account.orm.services.SecretServer;
 import org.account.util.HibernateUtil;
 import org.junit.Test;

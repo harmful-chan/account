@@ -2,7 +2,7 @@ package org.account.orm.impl;
 
 import java.util.List;
 
-import org.account.orm.model.Node;
+import org.account.orm.bean.Node;
 import org.account.util.HibernateUtil;
 
 public class NodeImpl {

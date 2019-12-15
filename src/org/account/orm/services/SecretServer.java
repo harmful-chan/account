@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.account.orm.bean.*;
 import org.account.orm.impl.AccountImpl;
 import org.account.orm.impl.DepartmentImpl;
-import org.account.orm.model.*;
+import org.account.util.HibernateUtil;
+import org.apache.commons.codec.binary.Base64;
 
 public class SecretServer {
 	private AccountImpl  ai = null;
@@ -21,47 +23,14 @@ public class SecretServer {
 	}
 	
 	
+	public Account getAccount(String accountNumber) {
+		return (Account)HibernateUtil.queryOnly("FROM Account a WHERE a.number='"+accountNumber+"'");
+	}
+	
 	public String getAccountPassword(String number) {
 		Account account = this.ai.findByNumber(number);
 		return account.getPassword();
 	}
-	
-	
-	
-	/**
-	 * 把Account添加进部门中
-	 * @param account
-	 * @param departments
-	 */
-	public void addShare(Account account, String... departmentNames) {
-		Account staffAccount = this.ai.findByNumber(account.getNumber());
-		for (String departmentName : departmentNames) {
-			Department department = this.di.findByName(departmentName);
-			if(staffAccount != null) {
-				department.getAccounts().add(account);	
-			}else {
-				this.ai.add(account);
-				Account a = this.ai.findByNumber(account.getNumber());
-				department.getAccounts().add(a);
-			}
-			this.di.modify(department);
-		}
-		
-	}
-	
-	
-	/**
-	 * 获取部门共享Account
-	 * @param department
-	 * @return
-	 */
-	public List<Account> getShare(String departmentName){
-
-		
-		Department d = this.di.findByName(departmentName);
-		return new ArrayList<Account>(d.getAccounts());
-	}
-	
 	
 	
 	/**
@@ -71,35 +40,6 @@ public class SecretServer {
 	public void updateAccount(Account account) {
 		this.ai.updateAccount(account);
 	}
-	
-	
-	/**
-	 * 吧账号从部门移除
-	 * @param accountNumber
-	 * @param departmentName
-	 */
-	public void removeShare(String accountNumber, String departmentName) {
-		Department d = this.di.findByName(departmentName);
-		Account a = this.ai.findByNumber(accountNumber);
-		d.getAccounts().remove(a);
-		this.di.modify(d);
-	}
-	
-	/**
-	 * 判断账号是否属于部门
-	 * @param accountNumber
-	 * @param departmentName
-	 * @return
-	 */
-	public boolean isShare(String accountNumber,String departmentName) {
-		
-		Department d = this.di.findByName(departmentName);
-		Account a = this.ai.findByNumber(accountNumber);
-		
-		boolean flag = d.getAccounts().contains(a);
-		return flag;
-	}
-	
 	
 	
 	private long compareDate(String s1, String s2) {
@@ -113,15 +53,47 @@ public class SecretServer {
 	 * @return
 	 */
 	public boolean isValid(Account account) {
-		String curr = (new SimpleDateFormat("yyyyMMdd")).format(new Date());
-		return compareDate(curr,  account.getSalf().substring(0, 7)) < TIME_OUT;
+		try {
+			String curr = (new SimpleDateFormat("yyyyMMdd")).format(new Date());
+			String salf = account.getSalf().substring(0, 8);
+			return (Long.parseLong(curr) - Long.parseLong(salf)) < TIME_OUT;
+		}catch(Exception e) {
+			return false;
+		}
+		
 	}
 
-//	void addSpecific(Account, Staff... s);
-//	public List<Staff> getSpecifics(){
-//		
-//	}
 	
-//	void removeSpecific(Account, staff)
+	public String encode(String password, String self) {
+		try {
+			return new String(Base64.encodeBase64((password+self).getBytes(), true));	
+		}catch(Exception e) {
+			return null;
+		}
+		
+	}
+
+	public String decode(String deeppwd) {
+		try {
+			return new String(Base64.decodeBase64(deeppwd));
+		}catch(Exception e) {
+			return null;
+		}
+	}
+	
+	public String decodePassword(String deeppwd) {
+		//密码解析
+		String deep = decode(deeppwd);
+		String salf = deep.substring(deep.length()-17, deep.length());
+		String password = deep.replaceAll(salf, "");
+		return password;
+	}
+	
+	public String decodeSalf(String deeppwd) {
+		//密码解析
+		String deep = decode(deeppwd);
+		String salf = deep.substring(deep.length()-17, deep.length());
+		return salf;
+	}
 	
 }

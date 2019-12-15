@@ -7,7 +7,7 @@
 	<session-factory>
 	   <!-- JDBC 驱动程序类 -->
 	   <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-	   <property name="hibernate.connection.url">jdbc:sqlserver://113.65.145.28:1433; DatabaseName=account</property>
+	   <property name="hibernate.connection.url">jdbc:sqlserver://113.65.145.6:1433; DatabaseName=account</property>
 	   <property name="hibernate.connection.username">sa</property>
 	   <property name="hibernate.connection.password">Admin123</property>
 	   <property name="hibernate.connection.autocommit">true</property>
@@ -20,11 +20,11 @@
 	   <!-- 允许获取线程会话 -->
 	   <property name="hibernate.current_session_context_class">thread</property>
 	   <!-- 下面是映射的类 -->
-	   <mapping resource="org/account/orm/model/Account.hbm.xml"/>
-	   <mapping resource="org/account/orm/model/Department.hbm.xml"/>
-	   <mapping resource="org/account/orm/model/Staff.hbm.xml"/>
-	   <mapping resource="org/account/orm/model/Role.hbm.xml"/>
-	   <mapping resource="org/account/orm/model/Permission.hbm.xml"/>
-	   <mapping resource="org/account/orm/model/Node.hbm.xml"/>
+	   <mapping resource="org/account/orm/bean/Account.hbm.xml"/>
+	   <mapping resource="org/account/orm/bean/Department.hbm.xml"/>
+	   <mapping resource="org/account/orm/bean/Staff.hbm.xml"/>
+	   <mapping resource="org/account/orm/bean/Role.hbm.xml"/>
+	   <mapping resource="org/account/orm/bean/Permission.hbm.xml"/>
+	   <mapping resource="org/account/orm/bean/Node.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>

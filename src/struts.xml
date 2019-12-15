@@ -16,26 +16,36 @@
 		</interceptors>
     </package>
     
+   
     <package name="home-package" namespace="/Home" extends="account-package">
 		<action name="*" class="org.account.web.action.HomeAction" method="{1}">
-			<result>/home.jsp</result>
-			<result name="error">/home.jsp</result>
+			<result name="home">/home.jsp</result>
+			<result name="input">/home.jsp</result>
 			<result name="welcome">/welcome.jsp</result>
+			<result name="error" type="redirectAction">home</result>
 			<interceptor-ref name="identityStack"/>
 		</action>
     </package>
     
-    <package name="userprifile-package" namespace="/User" extends="account-package">
+    <package name="user-package" namespace="/User" extends="account-package">
 		<action name="*" class="org.account.web.action.UserAction" method="{1}">
 			<result>/user.jsp</result>
-			<result name="error">/home.jsp</result>
+			<result name="input">/user.jsp</result>
+			<result name="error" type="redirectAction">
+      			<param name="actionName">home</param>
+      			<param name="namespace">/Home</param>
+  			</result>
 			<interceptor-ref name="identityStack"/>
 		</action>
     </package>
-    <package name="accounttanle-package" namespace="/Table" extends="account-package">
+    <package name="table-package" namespace="/Table" extends="account-package">
 		<action name="*" class="org.account.web.action.TableAction" method="{1}">
 			<result>/table.jsp</result>
-			<result name="error">/home.jsp</result>
+			<result name="input">/welcome.jsp</result>
+			<result name="error" type="redirectAction">
+      			<param name="actionName">home</param>
+      			<param name="namespace">/Home</param>
+  			</result>
 			<interceptor-ref name="identityStack"/>
 		</action>
     </package>
