@@ -19,30 +19,28 @@ public class HomeAction extends ActionBase implements ModelDriven<HomeContext>{
 	
 	@SkipValidation
 	public String home() throws Exception {
+		
 		List<Staff> holdStaffList = info.getHoldStaffList();    //添加测试用户
 		List<Staff> notHoldStaffList = info.getNotHoldStaffList();
 		session.put("test_hold_staffs", holdStaffList);
 		session.put("test_not_hold_staffs", notHoldStaffList);
+		session.put("home_url", (String)session.get("urlHeader")+"/Home/home");
+		session.put("login_url", (String)session.get("urlHeader")+"/Home/login");
 		session.put("user_url", "#");
 		session.put("table_url", "#");
-		session.put("home_url", "http://localhost:8080/account/Home/home");
-		session.put("login_url", "http://localhost:8080/account/Home/login");
 		session.put("deplan_url", "#");
+		LoggerServer.console("Action: Home/home 返回首页");
 		if(!(boolean)session.get("isRedirect")) {
 			LoggerServer.info("请先登陆公司内部提供的帐号,非内部人人员不允许使用本系统");
 		}
-			
 		
 		
 		return "home";
 	}
 	public String login() throws Exception {
+		
 		Staff staff = active.getCurrent();
-		
-
-		
-		
-		Account account = info.getHoldStaffAccount(staff.getNumber());
+		Account account = staff.getAccount();
 		if(!account.getNumber().equals(homeRequest.getAccountNumber())) {
 			LoggerServer.warning("员工"+staff.getNumber()+"登录账号错误");
 			return ERROR;
@@ -56,21 +54,23 @@ public class HomeAction extends ActionBase implements ModelDriven<HomeContext>{
 		}
 
 		//设置当前用户登录状态
+		LoggerServer.console("Action: Home/login 添加当前员工为登录员工");
 		active.addActive(active.getCurrent());    
 		
-		
-		//设置跳转页面
-		
+		//设置跳转页面信息
 		session.put("login_info", homeRequest);
 		LoggerServer.success("欢迎员工登录，工号："+staff.getNumber());
 		flashUrl(staff);
-
+		
+		LoggerServer.console("Action: Home/login 返回用户主页");
 		return "welcome";
 	}
 	@SkipValidation
 	public String deplan() {
+		LoggerServer.console("Action: Home/deplan 登录用户移除当前用户");
 		active.removeActive(active.getCurrent());
 		LoggerServer.info("工号："+active.getCurrent().getNumber()+"退出成功");
+		LoggerServer.console("Action: Home/deplan 返回首页");
 		return "home";
 	}
 	

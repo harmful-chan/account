@@ -12,8 +12,8 @@ public class LoggerServer {
 	public static final String DANGER  = "danger";
 	
 	//"purple | blue | green | orange | red"
-	public static void console(Object msg) {
-		System.out.println(msg);
+	public static void console (Object msg) {
+		System.out.println(msg != null ? msg : "");
 	}
 	public static boolean haveMsg() {
 		return ServletActionContext.getContext().getSession().containsKey("msg");

@@ -24,6 +24,10 @@ public class InfoServerTest {
 	}
 	
 	@Test
+	public void ShouldOther() {
+	}
+	
+	@Test
 	public void ShouldGetStaffInfo() {
 		Staff ret = this.sis.getStaffInfo("A000010000");
 		assertNotNull(ret);

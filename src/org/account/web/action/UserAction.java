@@ -3,6 +3,7 @@ package org.account.web.action;
 import java.util.List;
 
 import org.account.orm.bean.*;
+import org.account.orm.services.LoggerServer;
 import org.account.web.bean.UserContext;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -19,10 +20,9 @@ public class UserAction  extends ActionBase implements ModelDriven<UserContext> 
 	
 	@SkipValidation
 	public String getInfo() throws Exception {
-		
-		Staff  staff = info.getHoldStaffInfo(active.getCurrent().getNumber());
+		LoggerServer.console("Action: User/getInfo 获取当前用户信息");
+		Staff  staff = active.getCurrent();
 		List<Permission> permissions = info.getStaffPermissions(staff.getNumber());    //获取权限码
-		
 		UserContext uvm = new UserContext();
 		uvm.setOperator(staff.getNumber());
 		uvm.setAccountNumber(staff.getAccount().getNumber());
@@ -38,12 +38,15 @@ public class UserAction  extends ActionBase implements ModelDriven<UserContext> 
 		uvm.setEmail(staff.getEmail());
 		uvm.setPermissioms(permissions.toString());
 		session.put("user_info", uvm);
-		session.put("user_update_url", "http://localhost:8080/account/User/alterdInfo");
+		session.put("user_update_url", (String)session.get("urlHeader")+"/User/alterdInfo");
 		flashUrl(staff);
+		
+		LoggerServer.console("Action: User/getInfo 返回用户信息页");
 		return SUCCESS;
 	}
 	
 	public String alterdInfo() throws Exception {
+		LoggerServer.console("Action: User/alterdInfo 更新当前用户信息");
 		Staff s = new Staff();
 		s.setNumber(userRequest.getOperator());
 		s.setCity(userRequest.getCity());

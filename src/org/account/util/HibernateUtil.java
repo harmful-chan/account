@@ -28,18 +28,26 @@ public class HibernateUtil {
 	
 	public static void init() {
 		if(!isInit) {
-			LoggerServer.console("Hibernate:读取配置文件");
+			LoggerServer.console("Hibernate: 开始配置Hibernate");
+			
+			LoggerServer.console("Hibernate: 读取配置文件");
 			Configuration cfg = new Configuration().configure();
+			String url = cfg.getProperty("hibernate.connection.url");
+			LoggerServer.console("Hibernate: 连接字符串"+url);
 			
-			LoggerServer.console("Hibernate:建立会话工厂");
+			
+			LoggerServer.console("Hibernate: 建立会话工厂");
 			sessionFactory = cfg.buildSessionFactory();
+			LoggerServer.console("Hibernate: sessionFactory "+sessionFactory);
 			
-			LoggerServer.console("Hibernate:数据写入核心数据");
+			
+			LoggerServer.console("Hibernate: 数据写入核心数据");
 			initCoreData();
 			
-			LoggerServer.console("Hibernate:数据写入测试数据数据");
+			LoggerServer.console("Hibernate: 数据写入测试数据数据");
 			initTestDate();
 			
+			LoggerServer.console("Hibernate: 结束配置Hibernate");
 			isInit= true;
 		}
 

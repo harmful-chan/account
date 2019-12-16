@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.account.orm.bean.*;
+import org.account.orm.services.LoggerServer;
 import org.account.web.bean.TableContext;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -52,19 +53,23 @@ public class TableAction extends ActionBase implements ModelDriven<TableContext>
 	
 	@SkipValidation
 	public String getInterior() throws Exception {
+		LoggerServer.console("Action: Table/getInterior 获取当前用户部门账号");
 		Staff activeStaff = active.getCurrent();
 		joinInterior(activeStaff.getDepartment());
 		session.put("table_info", tables);
 		flashUrl(activeStaff);
+		LoggerServer.console("Action: Table/getInterior 返回用户账号列表页");
 		return SUCCESS;
 	}
 	
 	
 	public String alterInterior() throws Exception {
+		
 		Department  department = active.getCurrent().getDepartment();
 		//密码解析
 		String password = secret.decodePassword(tableContext.getDeeppwd());
 		String salf = secret.decodeSalf(tableContext.getDeeppwd());
+		
 		//构建Account
 		Account account = new Account();
 		account.setNumber(tableContext.getAccountNumber());
@@ -72,8 +77,10 @@ public class TableAction extends ActionBase implements ModelDriven<TableContext>
 		account.setSalf(salf);
 		account.setExplain(tableContext.getExplain());
 		
+	
 		//Account 存在 修改
 		//Account 不存在 添加
+		LoggerServer.console("Action: Table/alterInterior 更新/添加部门账号 "+account.getNumber());
 		info.addShareAccount(account, department.getName());
 		return getInterior();
 	}
@@ -81,6 +88,7 @@ public class TableAction extends ActionBase implements ModelDriven<TableContext>
 	
 	public String removeInterior() throws Exception {
 		Staff activeStaff = active.getCurrent();
+		LoggerServer.console("Action: Table/alterInterior 移除当前用户部门账号 "+tableContext.getAccountNumber());
 		info.removeShareAccount(tableContext.getAccountNumber(), activeStaff.getDepartment().getName());
 		return getInterior();
 	}
@@ -90,6 +98,7 @@ public class TableAction extends ActionBase implements ModelDriven<TableContext>
 	 * @throws Exception 
 	 */
 	private void joinSuper() throws Exception {
+		
 		List<Staff> holdStaffs = info.getHoldStaffList();
 		for (Staff staff : holdStaffs) {
 			Account a = staff.getAccount();
@@ -107,10 +116,12 @@ public class TableAction extends ActionBase implements ModelDriven<TableContext>
 	
 	@SkipValidation
 	public String getSuper() throws Exception {
+		LoggerServer.console("Action: Table/getSuper 获取全部登录账号信息");
 		joinSuper();
 		session.put("table_info", tables);
 		Staff activeStaff = active.getCurrent();
 		flashUrl(activeStaff);
+		LoggerServer.console("Action: Table/getInterior 返回用户账号列表页");
 		return SUCCESS;
 	}
 	
@@ -126,6 +137,8 @@ public class TableAction extends ActionBase implements ModelDriven<TableContext>
 		newAccount.setPassword(password);
 		newAccount.setSalf(salf);
 		newAccount.setExplain(this.tableContext.getExplain());
+		
+		LoggerServer.console("Action: Table/alterSuper 更新/添加登录账号 "+newAccount.getNumber());
 		//存在，修改
 		//不存在，添加
 		info.addHoldStaff(ownerNumber, newAccount);
@@ -134,6 +147,7 @@ public class TableAction extends ActionBase implements ModelDriven<TableContext>
 	
 	
 	public String removeSuper() throws Exception {
+		LoggerServer.console("Action: Table/removeSuper 移除登录账号账号 "+tableContext.getOwnerNumber());
 		info.removeHoldStaffAccount(tableContext.getOwnerNumber());
 		return getSuper();
 	}
@@ -143,8 +157,7 @@ public class TableAction extends ActionBase implements ModelDriven<TableContext>
 	
 	@SkipValidation
 	public String getRoot() throws Exception {
-		
-		
+		LoggerServer.console("Action: Table/getRoot 获取全部信息");
 		//添加所有持号员工
 		joinSuper();
 		//添加所有部门
@@ -158,6 +171,7 @@ public class TableAction extends ActionBase implements ModelDriven<TableContext>
 		session.put("table_info", tables);
 		Staff activeStaff = active.getCurrent();
 		flashUrl(activeStaff);
+		LoggerServer.console("Action: Table/getRoot 返回用户账号列表页");
 		return SUCCESS;
 	}
 	

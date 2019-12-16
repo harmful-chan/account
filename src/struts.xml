@@ -22,7 +22,7 @@
 			<result name="home">/home.jsp</result>
 			<result name="input">/home.jsp</result>
 			<result name="welcome">/welcome.jsp</result>
-			<result name="error" type="redirectAction">home</result>
+			<result name="error" >/home.jsp</result>
 			<interceptor-ref name="identityStack"/>
 		</action>
     </package>
