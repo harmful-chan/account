@@ -70,7 +70,6 @@ public class SecretServer {
 		}catch(Exception e) {
 			return null;
 		}
-		
 	}
 
 	public String decode(String deeppwd) {

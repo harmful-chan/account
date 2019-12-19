@@ -33,9 +33,7 @@ function encode(password){
 	
 	var nowDate = year + "" + month + "" + day + "" + hour + "" + min + "" + sec + "" +ff;
 	var deep = password+""+nowDate;
-	
 	var deeppwd = window.btoa(deep);
-	
 	return deeppwd;
 }  	
 
