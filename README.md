@@ -29,20 +29,33 @@
 
 ## 实现细节
 + 数据库设计
-[点击查看UML](https://www.processon.com/view/link/5ddc9984e4b07f8de34221ac)
-<br>账号表：账号，密码，密钥，可用部门，可用人员
-<br>角色表：角色，可用权限
-<br>权限表：权限码，说明，对应资源
-<br>资源表：url，是否私有，对应权限
+![数据库设计](https://github.com/youyou-579/123/blob/master/2.8.jpg?raw=true)
+  <br>角色（role）：分四个等级，roor、admin、一个角色对应多个或多个权限。
+  <br>权限（permission）：权限码（code）由实际情况确定，一般安全等级越高，数值越高，一个权限对应一个或多个资源。作为角色与资源的连接桥梁
+  <br>资源（node）：由公司实际情况确定，一般一个资源对应公司一个访问url。
+  <br>员工（staff）：一个员工对应一个部门‘一个职位、一个登录账号。
+  <br>部门（department）：一个部门对应多个员工、多个普通账号。
 
-+ 资源权限关系
-[点击查看UML](https://www.processon.com/view/link/5de27d32e4b00e6d90104f34)
++ 加解密
+![加解密](https://github.com/youyou-579/123/blob/master/2.8.jpg?raw=true)
+ <br>算法：Base64
+ <br>如：当前时间为yyyy年MM月dd日hh点mm分ss秒fff毫秒
+ <br>传输字符串 = Base64(password+yyyyMMddhhmmssfff)
+ <br>账号有效性：通过密钥可以确定建立账号的时间，如果建立时间与当前时间比较超过30天，则账号不可用（仅针对登陆账号）。
 
-+ 类结构
-[点击查看UML](https://www.processon.com/view/link/5dddecf6e4b01291734556b8)
++ 拦截器设计
+![拦截器设计](https://github.com/youyou-579/123/blob/master/2.8.jpg?raw=true)
+  <br>主要功能
+  <br>初始化数据库：只执行一次，检测目标数据库是否有业务数据，如果为空会自动添加数据。
+  <br>服务初始化：初始化StaffInfoServer、ResourceServer、ActiveServer等服务，并通过接口函数IactionBase.setxxxServer(服务对象)把服务注入到相应的控制器中。
+  <br>请求资源合法判断：获取请求url，判断资源是共有或私有资源，错误则返回home页面
+  <br>请求资源权限判断：根据业务数据判断请求资源是否权限内。
+  <br>活动员工管理：获取员工数据，并设置为当前登录员工，数据供Action使用。
 
-+ 过滤器设计
-[点击查看UML](https://www.processon.com/view/link/5ddcae0be4b07f8de342777f)
+
++ 业务关系
+![业务关系](https://github.com/youyou-579/123/blob/master/2.8.jpg?raw=true)
+![业务关系](https://github.com/youyou-579/123/blob/master/2.8.jpg?raw=true)
 
 +  业务流程图
-[点击查看UML](https://www.processon.com/view/link/5dde373ae4b0e2c2988ff8c7)
+![业务流程图](https://github.com/youyou-579/123/blob/master/2.8.jpg?raw=true)
