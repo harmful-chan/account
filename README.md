@@ -50,11 +50,12 @@ WebContent
   <br>选用Hibernate+jdbc实现
 
 ## 系统设计
+
 +  业务流程图
-![业务流程图](http://assets.processon.com/chart_image/5df64a4ee4b004cc9a30f504.png?_=1577088598596)
+![业务流程图](http://assets.processon.com/chart_image/5df64a4ee4b004cc9a30f504.png?_=1577103926668)
 
 + [数据库设计](https://github.com/harmful-chan/account/tree/1.0/src/org/account/orm/bean)
-![数据库设计](http://assets.processon.com/chart_image/5ddc9984e4b0fcce5b59e5c1.png?_=1577088464744)
+![数据库设计](http://assets.processon.com/chart_image/5ddc9984e4b0fcce5b59e5c1.png?_=1577104062968)
   <br>角色（role）：一个角色对应多个权限。分四个等级，roor、admin、governer、normal。
   <br>权限（permission）：一个权限对应一个或多个资源。权限码（code）由实际情况确定，一般安全等级越高，数值越高。
   <br>资源（node）：一个资源对应公司一个访问url。
@@ -62,14 +63,14 @@ WebContent
   <br>部门（department）：一个部门对应多个员工、多个普通账号。
 
 + [加解密](https://github.com/harmful-chan/account/blob/1.0/src/org/account/orm/services/SecretServer.java)
-![加解密](http://assets.processon.com/chart_image/5df9f4b1e4b06c8b0bb37c55.png?_=1577088511300)
+![加解密](http://assets.processon.com/chart_image/5df9f4b1e4b06c8b0bb37c55.png?_=1577103843644)
  <br>算法：Base64
  <br>如：当前时间为yyyy年MM月dd日hh点mm分ss秒fff毫秒
  <br>传输字符串 = Base64(password+yyyyMMddhhmmssfff)
  <br>账号有效性：通过密钥可以确定建立账号的时间，如果建立时间与当前时间比较超过30天，则账号不可用（仅针对登陆账号）。
 
 + [拦截器设计](https://github.com/harmful-chan/account/blob/1.0/src/org/account/web/interceptor/IdentityInterceptor.java)
-![拦截器设计](http://assets.processon.com/chart_image/5df99a66e4b0a9c790f20c5f.png?_=1577088529005)
+![拦截器设计](http://assets.processon.com/chart_image/5df99a66e4b0a9c790f20c5f.png?_=1577104279687)
   <br>主要功能
   <br>初始化数据库：只执行一次，检测目标数据库是否有业务数据，如果为空会自动添加数据。
   <br>服务初始化：初始化StaffInfoServer、ResourceServer、ActiveServer等服务，并通过接口函数IactionBase.setxxxServer(服务对象)把服务注入到相应的控制器中。
@@ -77,11 +78,14 @@ WebContent
   <br>请求资源权限判断：根据业务数据判断请求资源是否权限内。
   <br>活动员工管理：获取员工数据，并设置为当前登录员工，数据供Action使用。
 
-+ 公司角色权限关系
-![公司角色权限关系](http://assets.processon.com/chart_image/5de8a0dde4b0df12b4b7532f.png?_=1577088556096)
++ 公司部门角色权限关系
+![公司部门角色权限关系](http://assets.processon.com/chart_image/5de8a0dde4b0df12b4b7532f.png?_=1577088556096)
 
 + 公司权限资源关系
 ![公司权限资源关系](http://assets.processon.com/chart_image/5ddf829be4b0b2fab73a007d.png?_=1577088579299)
+
+
+
 
 ## 部署
 + 前端：Light Bootstrap Dashboard
